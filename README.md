@@ -41,9 +41,9 @@ akan muncul file <mark>package.json</mark>, tambahkan konfigurasi berikut :
 }
 ```
 
-1. <mark>"description" : "Restfull API Typ! Blog"</mark> Menambahkan Description
-2. <mark>"type" : "module"</mark> memberitahu nodeJs bahwa kita akan menggunakan format ES module (export import), secara default menggunakan "commonJs (required)
-3. <mark>"start" : "node index.js"</mark> membuat script start untuk menjadlankan code
+1. =="description" : "Restfull API Typ! Blog"== Menambahkan Description
+2. =="type" : "module"== memberitahu nodeJs bahwa kita akan menggunakan format ES module (export import), secara default menggunakan "commonJs (required)
+3. =="start" : "node index.js"== membuat script start untuk menjadlankan code
 
 Jangan lupa buat file <mark>index.js</mark> yang akan kita gunakan sebagai main code
 
