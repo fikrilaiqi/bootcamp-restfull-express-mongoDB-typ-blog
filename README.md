@@ -130,6 +130,7 @@ touch .gitignore
 dan isikan
 
 ```
+//.gitignore
 node_module
 ```
 
