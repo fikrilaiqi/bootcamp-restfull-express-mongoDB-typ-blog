@@ -129,9 +129,9 @@ touch .gitignore
 
 dan isikan
 
-```
+```js
 //.gitignore
-node_module
+node_module;
 ```
 
 medaftarkan semua perubahan pada repository ke version controll git, ketikan perintah
