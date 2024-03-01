@@ -145,18 +145,6 @@ melakukan commit perubahan pada git
 git commit -m "init server"
 ```
 
-pindah ke branch master
-
-```console
-git switch master
-```
-
-mengabungkan branch master dengan init-server
-
-```console
-git merge init-server
-```
-
 mendaftarkan remote repository github pada repository git kita
 
 ```console
@@ -166,5 +154,5 @@ git remote add origin https://github.com/.....git
 mengupload ke repository github
 
 ```console
-git push origin master
+git push origin init-server
 ```
