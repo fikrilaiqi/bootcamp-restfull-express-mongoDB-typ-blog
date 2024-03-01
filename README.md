@@ -8,6 +8,12 @@ Buka terminal lalu ketik perintah :
 git init
 ```
 
+membuat branch init-server dan pindah ke branc :
+
+```console
+git checkout -b "init-server"
+```
+
 ## Membuat project NodeJs
 
 Buka terminal lalu ketik perintah :
@@ -115,6 +121,8 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 membuat file <mark>.gitignore</mark>, untuk mencegah file/folder terupload ketika kita upload ke github, contohnya node_module karna akan memperbesar ukuran repository kita
 
+## Mendaftarkan history perubahan repository ke git dan upload ke github
+
 ```console
 touch .gitignore
 ```
@@ -123,4 +131,40 @@ dan isikan
 
 ```
 node_module
+```
+
+medaftarkan semua perubahan pada repository ke version controll git, ketikan perintah
+
+```console
+git add .
+```
+
+melakukan commit perubahan pada git
+
+```console
+git commit -m "init server"
+```
+
+pindah ke branch master
+
+```console
+git switch master
+```
+
+mengabungkan branch master dengan init-server
+
+```console
+git merge init-server
+```
+
+mendaftarkan remote repository github pada repository git kita
+
+```console
+git remote add origin https://github.com/.....git
+```
+
+mengupload ke repository github
+
+```console
+git push origin
 ```
