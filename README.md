@@ -43,7 +43,7 @@ akan muncul file **package.json**, tambahkan konfigurasi berikut :
 
 1. **"description" : "Restfull API Typ! Blog"** Menambahkan Description
 2. **"type" : "module"** memberitahu nodeJs bahwa kita akan menggunakan format ES module (export import), secara default menggunakan "commonJs (required)
-3. **"start" : "node index.js"** membuat script start untuk menjadlankan code
+3. **"start" : "node index.js"** membuat script start untuk menjalankan code
 
 Jangan lupa buat file **index.js** yang akan kita gunakan sebagai main code
 
