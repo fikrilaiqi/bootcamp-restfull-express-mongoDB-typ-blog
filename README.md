@@ -22,7 +22,7 @@ Buka terminal lalu ketik perintah :
 npm init
 ```
 
-akan muncul file <mark>package.json</mark>, tambahkan konfigurasi berikut :
+akan muncul file **package.json**, tambahkan konfigurasi berikut :
 
 ```js
 //package.json
@@ -41,17 +41,17 @@ akan muncul file <mark>package.json</mark>, tambahkan konfigurasi berikut :
 }
 ```
 
-1. =="description" : "Restfull API Typ! Blog"== Menambahkan Description
-2. =="type" : "module"== memberitahu nodeJs bahwa kita akan menggunakan format ES module (export import), secara default menggunakan "commonJs (required)
-3. =="start" : "node index.js"== membuat script start untuk menjadlankan code
+1. **"description" : "Restfull API Typ! Blog"** Menambahkan Description
+2. **"type" : "module"** memberitahu nodeJs bahwa kita akan menggunakan format ES module (export import), secara default menggunakan "commonJs (required)
+3. **"start" : "node index.js"** membuat script start untuk menjadlankan code
 
-Jangan lupa buat file <mark>index.js</mark> yang akan kita gunakan sebagai main code
+Jangan lupa buat file **index.js** yang akan kita gunakan sebagai main code
 
 ```console
 touch index.js
 ```
 
-akan muncul file <mark>index.js</mark>, coba kita isikan dengan code
+akan muncul file **index.js**, coba kita isikan dengan code
 
 ```js
 //index.js
@@ -66,13 +66,13 @@ npm start
 
 ## Membuat server menggunakan ExpressJs
 
-Instal package <mark>express</mark>
+Instal package **express**
 
 ```console
 npm instal express --save
 ```
 
-setiap kita menginstall package maka akan terdaftar di <mark>package.json</mark> pada field dependencies
+setiap kita menginstall package maka akan terdaftar di **package.json** pada field dependencies
 
 ```js
 {
@@ -93,7 +93,7 @@ setiap kita menginstall package maka akan terdaftar di <mark>package.json</mark>
 }
 ```
 
-buka file <mark>index.js</mark>
+buka file **index.js**
 
 membuat aplication dengan express
 
@@ -119,7 +119,7 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 ```
 
-membuat file <mark>.gitignore</mark>, untuk mencegah file/folder terupload ketika kita upload ke github, contohnya node_module karna akan memperbesar ukuran repository kita
+membuat file **.gitignore**, untuk mencegah file/folder terupload ketika kita upload ke github, contohnya node_module karna akan memperbesar ukuran repository kita
 
 ## Mendaftarkan history perubahan repository ke git dan upload ke github
 
