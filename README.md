@@ -166,5 +166,5 @@ git remote add origin https://github.com/.....git
 mengupload ke repository github
 
 ```console
-git push origin
+git push origin master
 ```
