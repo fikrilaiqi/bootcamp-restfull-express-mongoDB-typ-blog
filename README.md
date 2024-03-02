@@ -269,13 +269,6 @@ app.use("/api/v1", router);
 ...
 ```
 
-masuk ke direktori src
-membuat folder controllers dan membuat file `usersController.js` di dalam folder controllers
-
-```console
-mkdir controllers && cd controllers/  && touch usersController.js
-```
-
 ## Mendaftarkan history perubahan repository ke git dan upload ke github
 
 medaftarkan semua perubahan pada repository ke version controll git, ketikan perintah
