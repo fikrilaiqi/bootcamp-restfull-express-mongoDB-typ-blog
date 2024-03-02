@@ -152,6 +152,18 @@ beberapa package yang akan digunakan
 -   bcrypt => untuk mengenkripsi data sensitif, seperti password, agar tidak terekspos secara bebas.
 -   joi => untuk validasi data inputan.
 
+```console
+npm i bcrypt joi
+```
+
+masuk ke direktori src
+
+buat file routers
+
+```console
+ touch routers.js
+```
+
 membuat router `POST` dengan path `auth/register`
 
 ```js
@@ -255,21 +267,6 @@ import router from "./src/routers.js";
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1", router);
 ...
-```
-
-```console
-npm i bcrypt joi
-```
-
-masuk ke direktori src
-buat file routers
-
-```js
-
-```
-
-```console
- touch routers.js
 ```
 
 masuk ke direktori src
