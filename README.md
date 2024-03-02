@@ -152,7 +152,7 @@ beberapa package yang akan digunakan
 -   bcrypt => untuk mengenkripsi data sensitif, seperti password, agar tidak terekspos secara bebas.
 -   joi => untuk validasi data inputan.
 
-membuat router `POST` dengan patch `auth/register`
+membuat router `POST` dengan path `auth/register`
 
 ```js
 import { Router } from "express";
@@ -202,12 +202,9 @@ router.post(
             const input = req.body;
 
             //find user exist,  hide password and timestamp
-            const existUser = await usersSchema.findOne(
-                {
-                    username: input.username,
-                },
-                "-password -createdAt -updatedAt"
-            );
+            const existUser = await usersSchema.findOne({
+                username: input.username,
+            });
             //if user found
             if (existUser) {
                 return res.status(400).json({
