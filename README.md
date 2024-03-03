@@ -260,7 +260,7 @@ git push origin 3.endpoint/auth
 
 ## Membuat code menjadi modular
 
-agar code yang kita buat lebih terstruktur, mudah dibaca, meminimalisir duplikasi kode dan mudah dimaintance, kita pisahkan kode kita menjadi module-modul terpisah.
+agar code yang kita buat lebih terstruktur, mudah dibaca, meminimalisir duplikasi kode dan mudah dimaintance, kita pisahkan kode kita menjadi module-modul terpisah sesuai dengan konteksnya.
 
 1. membuat folder helpers dan membuat `handlerResponseHelper.js`
 
