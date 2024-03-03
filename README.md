@@ -64,7 +64,7 @@ kok tidak jalan ya connectDbnya ?, secara default nodeJS tidak melakukan hot rel
 untuk mengatasi problem itu , install package `nodemon` sebagai development dependencies.
 
 ```console
-npm i -g nodemon -D
+npm i nodemon -D
 ```
 
 tambahan script baru , dengan command dev
