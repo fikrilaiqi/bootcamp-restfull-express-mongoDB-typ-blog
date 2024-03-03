@@ -1,75 +1,49 @@
 # RestFull API menggunakan Express dan MongoDB
 
-## Membuat endpoint Auth Refresh Token
+## Membuat endpoint Get Blog All
 
-membuat branch 6.endpoint/auth-refresh-token dan pindah ke branch :
+membuat branch 6.endpoint/get-blog-all dan pindah ke branch :
 
 ```console
-git checkout -b 6.endpoint/auth-refresh-token
+git checkout -b 6.endpoint/get-blog-all
 ```
 
-> untuk melindungi akses routers/endpoints yang membutuhkan authentifikasi, kita harus memeriksa request yang masuk, apakah memiliki token valid atau tidak melalui middleware dan apabila secretnya tidak sama dengan yang disimpan server maka tidak akan lolos verifikasi.
-
-buat folder middlewares dan buat file `checkAuthMiddleware.js`
+membuat `schema blogs`
+membuat file `blogsSchema.js` di folder schemas
 
 ```js
-//checkAuthMiddleware.js
-import jwt from "jsonwebtoken";
-import utils from "../utils/index.js";
+//schemas/blogsSchema.js
+import { Schema, model } from "mongoose";
 
-export const checkAuthMidddleware = (req, res, next) => {
-    try {
-        //put token in request header Authorization :  "Bearer <token>"
-        const authHeader = req.header("Authorization") || "";
-        //put token only
-        const token = authHeader && authHeader.split(" ").at(1);
-        //if token empty
-        if (!token) throw Error("Access Denied!");
-        //veryfy token with secret
-        const verified = jwt.verify(token, utils.getEnv("JWT_SECRET"));
-        //if not verified
-        if (!verified) throw Error("Invalid Token!");
-        //save data to req.authData
-        req.authData = verified;
-        //next process
-        next();
-    } catch (error) {
-        //error handler
-        return utils.handlerResponse(res, "UNAUTHORIZED", {
-            message: error.message || "Expired Token!",
-        });
-    }
-};
+const blogsSchema = new Schema(
+    {
+        content: { type: String, required: true },
+        tags: { type: [String] },
+        author_id: { type: Schema.Types.ObjectId, ref: "user", required: true },
+        title: { type: String, required: true },
+        thumbnail: { type: String },
+    },
+    { timestamps: true }
+);
+
+export default model("blog", blogsSchema);
 ```
 
-> `Refresh Token` ini digunakan untuk membuat token baru, jadi setiap ada request masuk maka token akan di perbaharui.
-
-membuat modul refreshToken di file `authController.js`
+membuat file `blogsController.js` dan membuat module getBlogAll
 
 ```js
-//authController.js
-...
-
-const refreshToken = async (req, res) => {
+//blogsController.js
+const getBlogAll = async (req, res) => {
     try {
-        const { _id, ...rest } = req.authData;
-        //find user exist and hide password
-        const existUser = await usersSchema.findOne({ _id }, "-password");
-        //if user not found
-        if (!existUser) {
-            return utils.handlerResponse(res, "NOT_FOUND", {
-                message: "User Not Found!",
-            });
-        }
+        //find All Blog and populate/join from ref
+        const response = await blogsSchema
+            .find({})
+            .populate("author_id", "username image");
+
         //return response
         return utils.handlerResponse(res, "OK", {
-            message: "Refresh Token Success!",
-            data: {
-                token: utils.createToken({
-                    _id: existUser._id,
-                    ...existUser.toObject(),
-                }),
-            },
+            message: "Get All blog Success!",
+            data: response,
         });
     } catch (error) {
         //return response error
@@ -79,24 +53,20 @@ const refreshToken = async (req, res) => {
     }
 };
 
-export default { register, login, refreshToken };
+export default { getBlogAll };
 ```
 
-buat router HTTP Method `GET` dengan path `auth/refresh-token` di file `routers.js`
+buat router HTTP Method `GET` dengan path `/blog` di file `routers.js`
 
 ```js
 //routers.js
 ...
-import { checkAuthMidddleware } from "./middlewares/checkAuthMiddleware.js";
+import blogsController from "./controllers/blogsController.js";
 const router = Router();
 
 ...
-router.post("/auth/login", authValidation.login, authController.login);
-router.post(
-    "/auth/refresh-token",
-    checkAuthMidddleware,
-    authController.refreshToken
-);
+//blog
+router.get("/blog/all", blogsController.getBlogAll);
 
 export default router;
 ```
@@ -112,11 +82,11 @@ git add .
 melakukan commit perubahan
 
 ```console
-git commit -m "add endpoint auth refresh token"
+git commit -m "add endpoint get blog all"
 ```
 
 mengupload ke repository github
 
 ```console
-git push origin 6.endpoint/auth-refresh-token
+git push origin 6.endpoint/get-blog-all
 ```
