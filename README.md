@@ -51,7 +51,7 @@ akan muncul file **package.json**, tambahkan konfigurasi berikut :
 buat folder src dan buat file `app.js` didalam folder src, yang akan kita gunakan sebagai main code
 
 ```js
-//index.js
+//app.js
 console.log("Hello Word!");
 ```
 
@@ -95,7 +95,7 @@ buka file `app.js`
 membuat aplication dengan express
 
 ```js
-//index.js
+//app.js
 import express from "express";
 
 const app = express();
@@ -107,7 +107,7 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 membuat example http method GET
 
 ```js
-//index.js
+//app.js
 ...
 
 app.get("/", (req, res) => {
