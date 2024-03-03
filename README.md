@@ -234,7 +234,7 @@ router.post(
 );
 ```
 
-daftarkan semua router di main `app.js` dengan patch `/api/v1` sebagai middleware
+daftarkan semua router sebagai middleware di main `app.js` dengan path `/api/v1`
 
 ```js
 //app.js
