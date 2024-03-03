@@ -110,7 +110,7 @@ membuat folder `upload` di root folder, agar tidak error ketika upload file dan 
 ```console
 node_modules
 .env
-folder/*
+upload/*
 ```
 
 membuat file `blogController.js` dan membuat module create
