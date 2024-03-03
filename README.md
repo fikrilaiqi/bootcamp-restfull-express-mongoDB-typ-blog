@@ -2,49 +2,39 @@
 
 ## Setup Middleware yang biasa digunakan
 
-membuat branch 2.setup-middleware-express dan pindah ke branch :
+membuat branch 3.setup-variable-environment dan pindah ke branch :
 
 ```console
-git checkout -b "2.setup-middleware-express"
+git checkout -b "3.setup-variable-environment"
 ```
 
-### middleware itu apa sih ?
+### environment varible itu apa sih ?
 
-> fungsi/method yang menjembatani request HTTP dan response, biasanya digunakan untuk melakukan authentifikasi, validasi inputan dan lain-lain.
+> variable yang diset dalam konfigurasi aplikasi. biasanya digunakan untuk menyimpan informasi yang rahasia. contohnya port, url databas, secret key dan lain lain.
 
-beberapa buildin middlware express yang sering digunakan :
-
-1. `express.json()` => memparsing request HTTP dengan content type aplication/json menjadi JSON, ketika kita melakukan HTTP method POST, PUT atau PATCH akan di simpan pada object request.body
-2. `express.urlencoded()` => memparsing request HTTP dengan content type aplication/x-www-form-urlencoded, ketika kita melakukan HTTP method POST, PUT atau PATCH akan di simpan pada object request.body
-
-implematasi dalam code
+membuat file `.env` di root folder aplikasi
 
 ```js
-//app.js
-...
-
-app.use(express.json({ limit: "2MB" }));
-app.use(express.urlencoded({ extended: true }));
-
-...
+//.env
+PORT = 5500;
 ```
 
-## Mendaftarkan history perubahan repository ke git dan upload ke github
-
-medaftarkan semua perubahan pada repository ke version controll git, ketikan perintah
+agar aplikasi dapat membaca variable yang ada di dalam `.env`, kita perlu menginstal package `dotenv`
 
 ```console
-git add .
+npm i dotenv
+
 ```
 
-melakukan commit perubahan pada git
+buat folder utils di folder src dan buat file `index.js` didalamnya
 
-```console
-git commit -m "setup middleware express"
-```
+```js
+// utils/index.js
+import dotenv from "dotenv";
+const getEnv = (key = "") => {
+    dotenv.config();
+    return process.env[`${key}`];
+};
 
-mengupload ke repository github
-
-```console
-git push origin 2.setup-middleware-express
+export default { getEnv };
 ```

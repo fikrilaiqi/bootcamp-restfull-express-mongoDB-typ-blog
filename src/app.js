@@ -1,7 +1,8 @@
 import express from "express";
+import utils from "./utils/index.js";
 
 const app = express();
-const PORT = 5500;
+const PORT = utils.getEnv("PORT");
 
 app.use(express.json({ limit: "2MB" }));
 app.use(express.urlencoded({ extended: true }));
