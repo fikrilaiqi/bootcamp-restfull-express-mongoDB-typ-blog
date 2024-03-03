@@ -408,6 +408,20 @@ const register = async (req, res) => {
 export default { register };
 ```
 
+jangan lupa rubah middleware dan controller di endpoint routernya seperti berikut:
+
+```js
+import { Router } from "express";
+import authController from "./controllers/authController.js";
+import authValidation from "./validations/authValidation.js";
+const router = Router();
+
+//auth
+router.post("/auth/register", authValidation.register, authController.register);
+
+export default router;
+```
+
 ## Mendaftarkan history perubahan repository ke git dan upload ke github
 
 medaftarkan semua perubahan pada repository local, ketikan perintah
