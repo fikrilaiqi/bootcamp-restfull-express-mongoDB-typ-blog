@@ -136,7 +136,7 @@ const login = async (req, res) => {
 export default { register, login };
 ```
 
-daftarkan endpoint pada file `routers.js`
+buat router HTTP Method `POST` dengan path `auth/login` di file `routers.js`
 
 ```js
 //routers.js
