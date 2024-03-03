@@ -4,6 +4,6 @@ import authValidation from "./validations/authValidation.js";
 const router = Router();
 
 //auth
-router.post("/auth/register", authValidation.login, authController.login);
+router.post("/auth/register", authValidation.register, authController.register);
 
 export default router;

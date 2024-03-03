@@ -1,8 +1,12 @@
 # RestFull API menggunakan Express dan MongoDB
 
-## Setup Middleware yang biasa digunakan
-
 ## Membuat endpoint Auth
+
+membuat branch 3.endpoint/auth dan pindah ke branch :
+
+```console
+git checkout -b 3.endpoint/auth
+```
 
 install package `mongoose` sebagai ODM (Object Data Modeling) untuk mongoDB
 
@@ -12,35 +16,7 @@ npm install mongoose
 
 membuat konfigurasi koneksi database dengan mongoose
 
-membuat folder src (source)
-
-```console
-mkdir src
-```
-
-masuk ke folder src
-
-```console
-cd src
-```
-
-membuat configs
-
-```console
-mkdir configs
-```
-
-masuk ke folder configs
-
-```console
-cd configs
-```
-
-membuat file db.js
-
-```console
-touch db.js
-```
+membuat folder configs dan membuat file `db.js` didalamnya
 
 membuat module connectDb
 
@@ -62,7 +38,7 @@ export default { connectDb };
 jalankan connectDb di index.js
 
 ```js
-//index.js
+//app.js
 import express from "express";
 import db from "./src/configs/db.js";
 
@@ -76,12 +52,12 @@ app.use(express.json({ limit: "2MB" }));
 ...
 ```
 
-kok tidak jalan ya connectDbnya, secara default nodeJS tidak melakukan hot reload apabila ada perubahan pada code yang sedang berjalan.
+kok tidak jalan ya connectDbnya ?, secara default nodeJS tidak melakukan hot reload apabila ada perubahan pada code yang sedang berjalan.
 
-untuk mengatasi problem itu , install package `nodemon` untuk development saja.
+untuk mengatasi problem itu , install package `nodemon` sebagai development dependencies.
 
 ```console
-npm i nodemon -D
+npm i -g nodemon -D
 ```
 
 tambahan script baru , dengan command dev
@@ -92,12 +68,12 @@ tambahan script baru , dengan command dev
     "name": "server",
     "version": "1.0.0",
     "description": "Restfull API Typ! Blog",
-    "main": "index.js",
+    "main": "app.js",
     "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node index.js",
-        "dev": "nodemon index.js"
+        "start": "node src/app.js",
+        "dev": "nodemon src/app.js"
     },
     "author": "",
     "license": "ISC",
@@ -119,14 +95,7 @@ npm run dev
 
 membuat `schema users`
 
-masuk ke direktori src
-membuat folder schemas dan membuat file `usersSchema.js` di dalam folder schemas
-
-```console
-mkdir schemas && cd schemas/  && touch usersSchema.js
-```
-
-membuat schema user
+membuat folder schemas dan membuat file `usersSchema.js` di dalamnya
 
 ```js
 //usersSchema.js
@@ -149,24 +118,17 @@ membuat router endpoint `auth/register`
 
 beberapa package yang akan digunakan
 
--   bcrypt => untuk mengenkripsi data sensitif, seperti password, agar tidak terekspos secara bebas.
--   joi => untuk validasi data inputan.
+-   `bcrypt` => untuk mengenkripsi data sensitif, seperti password, agar tidak terekspos secara bebas.
+-   `joi` => untuk validasi data inputan.
 
 ```console
 npm i bcrypt joi
 ```
 
-masuk ke direktori src
-
-buat file routers
-
-```console
- touch routers.js
-```
-
-membuat router `POST` dengan path `auth/register`
+buat file routers dan buat router HTTP Method `POST` dengan path `auth/register`
 
 ```js
+//routers.js
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import Joi from "joi";
@@ -219,11 +181,14 @@ router.post(
             });
             //if user found
             if (existUser) {
-                return res.status(400).json({
-                    status: "error",
-                    message: "User is exist, get to Login!",
-                    code: 400,
-                });
+                return res
+                    .status(400)
+                    .json({
+                        status: "error",
+                        message: "User is exist, get to Login!",
+                        code: 400,
+                    })
+                    .end();
             }
             //hash password
             const hashedPassword = await bcrypt.hash(input.password, 10);
@@ -236,11 +201,14 @@ router.post(
             //create user
             await usersSchema.create(createData);
             //return response
-            return res.status(201).json({
-                status: "success",
-                message: "Register Success!",
-                code: 201,
-            });
+            return res
+                .status(201)
+                .json({
+                    status: "success",
+                    message: "Register Success!",
+                    code: 201,
+                })
+                .end();
         } catch (error) {
             //return response error
             return res
@@ -256,9 +224,10 @@ router.post(
 );
 ```
 
-daftarkan semua router di main `index.js` sebagi middleware
+daftarkan semua router di main `app.js` sebagi middleware
 
 ```js
+//app.js
 import express from "express";
 import db from "./src/configs/db.js";
 import router from "./src/routers.js";
@@ -271,13 +240,13 @@ app.use("/api/v1", router);
 
 ## Mendaftarkan history perubahan repository ke git dan upload ke github
 
-medaftarkan semua perubahan pada repository ke version controll git, ketikan perintah
+medaftarkan semua perubahan pada repository local, ketikan perintah
 
 ```console
 git add .
 ```
 
-melakukan commit perubahan pada git
+melakukan commit perubahan
 
 ```console
 git commit -m "add endpoint register"
@@ -286,30 +255,107 @@ git commit -m "add endpoint register"
 mengupload ke repository github
 
 ```console
-git push origin endpoint/auth
+git push origin 3.endpoint/auth
 ```
 
 ## Membuat code menjadi modular
 
-agar code yang kita buat lebih terstruktur, mudah dibaca dan mudah dimaintance, kita pisahkan kode kita menjadi module modul terpisah.
+agar code yang kita buat lebih terstruktur, mudah dibaca dan mudah dimaintance, kita pisahkan kode kita menjadi module-modul terpisah.
 
-masuk ke folder src
+1. membuat folder helpers dan membuat `handlerResponseHelper.js`
 
-```console
-cd src/
+```js
+//handlerResponseHelper.js
+const getHttpCodeResponse = (type = "") => {
+    switch (type) {
+        case "OK":
+            return { code: 200, status: "success" };
+        case "CREATED":
+            return { code: 201, status: "success" };
+        case "BAD_REQUEST":
+            return { code: 400, status: "error" };
+        case "UNAUTHORIZED":
+            return { code: 401, status: "error" };
+        case "INTERNAL_ERROR":
+            return {
+                code: 500,
+                status: "error",
+                message: "internal server error",
+            };
+        default:
+            return {
+                code: 500,
+                status: "error",
+                message: "internal server error",
+            };
+    }
+};
+
+export const handlerResponseHelper = (res, type = "", additionalData = {}) => {
+    const httpCodeResponse = getHttpCodeResponse(type);
+    return res
+        .status(httpCodeResponse.code)
+        .json({
+            ...httpCodeResponse,
+            ...additionalData,
+        })
+        .end();
+};
 ```
 
-1. membuat folder controllers dan membuat file authController.js didalam folder controller
+2. membuat file `validationInputHelper.js` didalam folder helpers
 
-```console
-mkdir controllers && cd controllers/ && touch authController.js
+```js
+//validationInputHelper.js
+import { handlerResponseHelper } from "./handlerResponseHelper.js";
+
+export const validationInputHelper = (req, res, next, joiSchema, input) => {
+    try {
+        if (!joiSchema || !input) {
+            throw Error("schema and input is reqiured!");
+        }
+        const { error } = joiSchema.validate(input);
+        //if error return status 400
+        if (error) {
+            throw Error(error.details.at(0).message);
+        }
+        next();
+    } catch (error) {
+        return handlerResponseHelper(res, `BAD_REQUEST`, {
+            message: `Validation Error : ${error}`,
+        });
+    }
+};
 ```
+
+3. membuat folder validations dan membuat file `authValidation.js` didalamnya
+
+```js
+//authValidation.js
+import Joi from "joi";
+import { validationInputHelper } from "../helpers/validationInputHelper.js";
+const register = (req, res, next) => {
+    const input = req.body;
+    //validation input
+    const schema = Joi.object({
+        username: Joi.string().min(6).required(),
+        password: Joi.string().min(6).required(),
+        fullname: Joi.string().min(8).required(),
+    });
+    return validationInputHelper(req, res, next, schema, input);
+};
+
+export default { register };
+```
+
+1. membuat folder controllers dan membuat file `authController.js` didalamnya
 
 ```js
 //authController
 import bcrypt from "bcrypt";
 import usersSchema from "../schemas/usersSchema.js";
-const login = async (req, res) => {
+import { handlerResponseHelper } from "../helpers/handlerResponseHelper.js";
+const register = async (req, res) => {
     try {
         const input = req.body;
         //find user exist
@@ -318,10 +364,8 @@ const login = async (req, res) => {
         });
         //if user found
         if (existUser) {
-            return res.status(400).json({
-                status: "error",
+            return handlerResponseHelper(res, "BAD_REQUEST", {
                 message: "User is exist, get to Login!",
-                code: 400,
             });
         }
         //hash password
@@ -334,87 +378,16 @@ const login = async (req, res) => {
         //create user
         await usersSchema.create(createData);
         //return response
-        return res.status(201).json({
-            status: "success",
+        return handlerResponseHelper(res, "CREATED", {
             message: "Register Success!",
-            code: 201,
         });
     } catch (error) {
         //return response error
-        return res
-            .status(500)
-            .json({
-                status: "error",
-                message: error?.message || error || "internal server error",
-                code: 500,
-            })
-            .end();
+        return handlerResponseHelper(res, "INTERNAL_ERROR", {
+            message: error.message || error,
+        });
     }
 };
 
-export default { login };
-```
-
-3. membuat folder helpers dan membuat file validationInputHelper.js didalam folder helpers
-
-```console
-mkdir helpers && cd helpers/ && touch validationInputHelper.js
-```
-
-```js
-//validationInputHelper.js
-export const validationInputHelper = (req, res, next, joiSchema, input) => {
-    try {
-        if (!schema || !input) {
-            throw Error("schema and input is reqiured");
-        }
-        const { error } = joiSchema.validate(input);
-        //if error return status 400
-        if (error) {
-            return res
-                .status(400)
-                .json({
-                    status: "error",
-                    message: error.details.at(0).message,
-                    code: 400,
-                })
-                .end();
-        }
-        next();
-    } catch (error) {
-        return res
-            .status(400)
-            .json({
-                status: "error",
-                message: `Validation Error : ${error}`,
-                code: 400,
-            })
-            .end();
-    }
-};
-```
-
-4. membuat folder validations dan membuat file authValidation.js didalam folder validations
-
-```console
-mkdir validations && cd validations/ && touch authValidation.js
-```
-
-```js
-//authValidation.js
-import Joi from "joi";
-import Joi from "joi";
-import { validationInputHelper } from "../helpers/validationInputHelper.js";
-const login = (req, res, next) => {
-    const input = req.body;
-    //validation input
-    const schema = Joi.object({
-        username: Joi.string().min(6).required(),
-        password: Joi.string().min(6).required(),
-        fullname: Joi.string().min(8).required(),
-    });
-    return validationInputHelper(req, res, next, schema, input);
-};
-
-export default { login };
+export default { register };
 ```

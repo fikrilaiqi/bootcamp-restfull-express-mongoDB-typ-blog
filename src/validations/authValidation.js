@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { validationInputHelper } from "../helpers/validationInputHelper.js";
-const login = (req, res, next) => {
+const register = (req, res, next) => {
     const input = req.body;
     //validation input
     const schema = Joi.object({
@@ -11,4 +11,4 @@ const login = (req, res, next) => {
     return validationInputHelper(req, res, next, schema, input);
 };
 
-export default { login };
+export default { register };

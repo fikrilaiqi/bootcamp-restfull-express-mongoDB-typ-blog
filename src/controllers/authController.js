@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import usersSchema from "../schemas/usersSchema.js";
-const login = async (req, res) => {
+import { handlerResponseHelper } from "../helpers/handlerResponseHelper.js";
+const register = async (req, res) => {
     try {
         const input = req.body;
         //find user exist
@@ -9,10 +10,8 @@ const login = async (req, res) => {
         });
         //if user found
         if (existUser) {
-            return res.status(400).json({
-                status: "error",
+            return handlerResponseHelper(res, "BAD_REQUEST", {
                 message: "User is exist, get to Login!",
-                code: 400,
             });
         }
         //hash password
@@ -25,22 +24,15 @@ const login = async (req, res) => {
         //create user
         await usersSchema.create(createData);
         //return response
-        return res.status(201).json({
-            status: "success",
+        return handlerResponseHelper(res, "CREATED", {
             message: "Register Success!",
-            code: 201,
         });
     } catch (error) {
         //return response error
-        return res
-            .status(500)
-            .json({
-                status: "error",
-                message: error?.message || error || "internal server error",
-                code: 500,
-            })
-            .end();
+        return handlerResponseHelper(res, "INTERNAL_ERROR", {
+            message: error.message || error,
+        });
     }
 };
 
-export default { login };
+export default { register };
