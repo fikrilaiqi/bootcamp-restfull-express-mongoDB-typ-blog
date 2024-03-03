@@ -1,7 +1,7 @@
 import blogSchemas from "../schemas/blogSchemas.js";
 import utils from "../utils/index.js";
 
-const getBlogAll = async (req, res) => {
+const getAll = async (req, res) => {
     try {
         //find blog all and populate/join from ref
         const response = await blogSchemas
@@ -21,4 +21,4 @@ const getBlogAll = async (req, res) => {
     }
 };
 
-export default { getBlogAll };
+export default { getAll };

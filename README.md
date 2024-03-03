@@ -33,7 +33,7 @@ membuat file `blogController.js` dan membuat module getBlogAll
 
 ```js
 //blogController.js
-const getBlogAll = async (req, res) => {
+const getAll = async (req, res) => {
     try {
         //find All Blog and populate/join from ref
         const response = await blogSchema
@@ -53,7 +53,7 @@ const getBlogAll = async (req, res) => {
     }
 };
 
-export default { getBlogAll };
+export default { getAll };
 ```
 
 buat router HTTP Method `GET` dengan path `/blog/all` di file `routers.js`
@@ -66,7 +66,7 @@ const router = Router();
 
 ...
 //blog
-router.get("/blog/all", blogController.getBlogAll);
+router.get("/blog/all", blogController.getAll);
 
 export default router;
 ```
