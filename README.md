@@ -2,6 +2,12 @@
 
 ## Setup Middleware yang biasa digunakan
 
+membuat branch 2.setup-middleware-express dan pindah ke branch :
+
+```console
+git checkout -b "2.setup-middleware-express"
+```
+
 ### middleware itu apa sih ?
 
 > fungsi/method yang menjembatani request HTTP dan response, biasanya digunakan untuk melakukan authentifikasi, validasi inputan dan lain-lain.
@@ -34,11 +40,11 @@ git add .
 melakukan commit perubahan pada git
 
 ```console
-git commit -m "setup-middleware-express"
+git commit -m "setup middleware express"
 ```
 
 mengupload ke repository github
 
 ```console
-git push origin setup-middleware-express
+git push origin 2.setup-middleware-express
 ```
