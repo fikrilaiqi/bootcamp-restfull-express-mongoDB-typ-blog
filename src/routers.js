@@ -15,6 +15,6 @@ router.get(
 );
 
 //blog
-router.get("/blog/all", blogController.getBlogAll);
+router.get("/blog/all", blogController.getAll);
 
 export default router;
