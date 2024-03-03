@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const userSchema = new Schema(
+const usersSchema = new Schema(
     {
         username: { type: String, required: true, unique: true },
         password: { type: String, required: true },
@@ -10,4 +10,4 @@ const userSchema = new Schema(
     { timestamps: true }
 );
 
-export default model("user", userSchema);
+export default model("user", usersSchema);
