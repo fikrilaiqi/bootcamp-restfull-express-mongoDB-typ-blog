@@ -260,7 +260,7 @@ git push origin 3.endpoint/auth
 
 ## Membuat code menjadi modular
 
-agar code yang kita buat lebih terstruktur, mudah dibaca dan mudah dimaintance, kita pisahkan kode kita menjadi module-modul terpisah.
+agar code yang kita buat lebih terstruktur, mudah dibaca, meminimalisir duplikasi kode dan mudah dimaintance, kita pisahkan kode kita menjadi module-modul terpisah.
 
 1. membuat folder helpers dan membuat `handlerResponseHelper.js`
 
@@ -390,4 +390,24 @@ const register = async (req, res) => {
 };
 
 export default { register };
+```
+
+## Mendaftarkan history perubahan repository ke git dan upload ke github
+
+medaftarkan semua perubahan pada repository local, ketikan perintah
+
+```console
+git add .
+```
+
+melakukan commit perubahan
+
+```console
+git commit -m "refactor code"
+```
+
+mengupload ke repository github
+
+```console
+git push origin 3.endpoint/auth
 ```
