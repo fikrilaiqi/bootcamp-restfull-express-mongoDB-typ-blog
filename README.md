@@ -111,7 +111,6 @@ membuat folder `upload` di root folder, agar tidak error ketika upload file dan 
 node_modules
 .env
 upload/*
-!upload/.gitkeep
 ```
 
 membuat file `blogController.js` dan membuat module create
