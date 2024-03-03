@@ -38,3 +38,23 @@ const getEnv = (key = "") => {
 
 export default { getEnv };
 ```
+
+## Mendaftarkan history perubahan repository ke git dan upload ke github
+
+medaftarkan semua perubahan pada repository ke version controll git, ketikan perintah
+
+```console
+git add .
+```
+
+melakukan commit perubahan pada git
+
+```console
+git commit -m "setup varible environment"
+```
+
+mengupload ke repository github
+
+```console
+git push origin 3.setup-variable-environment
+```
