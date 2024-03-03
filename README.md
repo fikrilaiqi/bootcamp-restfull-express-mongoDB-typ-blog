@@ -148,7 +148,7 @@ mendaftarkan remote repository github pada repository local kita
 git remote add origin https://github.com/.....git
 ```
 
-mengupload branch init-server ke repository github
+mengupload branch 1.init-server ke repository github
 
 ```console
 git push origin 1.init-server
