@@ -40,5 +40,5 @@ git commit -m "setup-middleware-express"
 mengupload ke repository github
 
 ```console
-git push origin 2.setup-middleware-express
+git push origin setup-middleware-express
 ```
