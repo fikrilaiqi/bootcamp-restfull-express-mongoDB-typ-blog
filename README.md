@@ -105,12 +105,11 @@ const processUploadFile = (file, oldFileName) => {
 export default { getEnv, handlerResponse, validationInput, createToken, processUploadFile };
 ```
 
-membuat folder `upload` di root folder, agar tidak error ketika upload file dan daftarkan pada file `.gitignore` agar tidak ikut terupload github repository
+membuat folder `upload` di root folder, agar tidak error ketika upload file dan tambahkan pada file `.gitignore` di dalamnya agar semua isi file tidak ikut terupload di github repository
 
 ```console
 node_modules
 .env
-upload/*
 ```
 
 membuat file `blogController.js` dan membuat module create
