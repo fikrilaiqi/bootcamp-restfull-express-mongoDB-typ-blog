@@ -1,9 +1,10 @@
 import express from "express";
 import db from "./configs/db.js";
 import router from "./routers.js";
+import utils from "./utils/index.js";
 
 const app = express();
-const PORT = 5500;
+const PORT = utils.getEnv("PORT");
 
 db.connectDb();
 

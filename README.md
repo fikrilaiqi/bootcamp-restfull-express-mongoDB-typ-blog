@@ -49,7 +49,29 @@ db.connectDb();
 
 app.use(express.json({ limit: "2MB" }));
 
-...
+```console
+npm i dotenv
+
+```
+
+buat folder utils di folder src dan buat file `index.js` didalamnya
+
+```js
+// utils/index.js
+import dotenv from "dotenv";
+const getEnv = (key = "") => {
+    dotenv.config();
+    return process.env[`${key}`];
+};
+
+export default { getEnv };
+```
+
+karna file `.env` ini berisi informasi yang rahasia , kita masukan dalam `.gitignore` agar tidak terupload pada github repository .
+
+```console
+node_modules
+.env;
 ```
 
 kok tidak jalan ya connectDbnya ?, secara default nodeJS tidak melakukan hot reload apabila ada perubahan pada code yang sedang berjalan.
