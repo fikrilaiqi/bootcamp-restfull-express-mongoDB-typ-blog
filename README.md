@@ -2,10 +2,10 @@
 
 ## Membuat endpoint Auth Register
 
-membuat branch 3.endpoint/auth-register dan pindah ke branch :
+membuat branch 4.endpoint/auth-register dan pindah ke branch :
 
 ```console
-git checkout -b 3.endpoint/auth-register
+git checkout -b 4.endpoint/auth-register
 ```
 
 install package `mongoose` sebagai ODM (Object Data Modeling) untuk mongoDB
@@ -260,13 +260,13 @@ git add .
 melakukan commit perubahan
 
 ```console
-git commit -m "add endpoint register"
+git commit -m "add endpoint auth register"
 ```
 
 mengupload ke repository github
 
 ```console
-git push origin 3.endpoint/auth-register
+git push origin 4.endpoint/auth-register
 ```
 
 ## Membuat code menjadi modular
@@ -425,5 +425,5 @@ git commit -m "refactor code"
 mengupload ke repository github
 
 ```console
-git push origin 3.endpoint/auth-register
+git push origin 4.endpoint/auth-register
 ```
