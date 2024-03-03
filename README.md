@@ -39,6 +39,14 @@ const getEnv = (key = "") => {
 export default { getEnv };
 ```
 
+karna file `.env` ini berisi informasi yang rahasia , kita masukan dalam `.gitignore` agar tidak terupload pada github repository .
+
+```console
+//.gitignore
+node_modules
+.env;
+```
+
 ## Mendaftarkan history perubahan repository ke git dan upload ke github
 
 medaftarkan semua perubahan pada repository ke version controll git, ketikan perintah
