@@ -14,7 +14,6 @@ const getHttpCodeResponse = (type = "") => {
             return { code: 201, status: "success" };
         case "BAD_REQUEST":
             return { code: 400, status: "error" };
-
         case "UNAUTHORIZED":
             return { code: 401, status: "error" };
         case "NOT_FOUND":
