@@ -5,7 +5,7 @@
 membuat branch 6.endpoint/auth-refresh-token dan pindah ke branch :
 
 ```console
-git checkout -b 5.endpoint/auth-refresh-token
+git checkout -b 6.endpoint/auth-refresh-token
 ```
 
 untuk melindungi akses routers/endpoints yang membutuhkan authentifikasi, kita harus memeriksa request yang masuk, apakah memiliki token valid atau tidak melalui middleware.
@@ -42,7 +42,7 @@ export const checkAuthMidddleware = (req, res, next) => {
 };
 ```
 
-`Refresh Token` ini digunakan untuk membuat token baru, jadi setiap ada request masuk maka token akan di perbaharui.
+> `Refresh Token` ini digunakan untuk membuat token baru, jadi setiap ada request masuk maka token akan di perbaharui.
 
 membuat modul refreshToken di file `authController.js`
 
@@ -118,5 +118,5 @@ git commit -m "add endpoint auth refresh token"
 mengupload ke repository github
 
 ```console
-git push origin 5.endpoint/auth-refresh-token
+git push origin 6.endpoint/auth-refresh-token
 ```
