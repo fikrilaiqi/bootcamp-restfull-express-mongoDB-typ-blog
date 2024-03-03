@@ -1,5 +1,6 @@
 import Joi from "joi";
-import { validationInputHelper } from "../helpers/validationInputHelper.js";
+import utils from "../utils/index.js";
+
 const register = (req, res, next) => {
     const input = req.body;
     //validation input
@@ -8,7 +9,7 @@ const register = (req, res, next) => {
         password: Joi.string().min(6).required(),
         fullname: Joi.string().min(8).required(),
     });
-    return validationInputHelper(req, res, next, schema, input);
+    return utils.validationInput(req, res, next, schema, input);
 };
 
 export default { register };

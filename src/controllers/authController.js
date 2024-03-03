@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import usersSchema from "../schemas/usersSchema.js";
-import { handlerResponseHelper } from "../helpers/handlerResponseHelper.js";
+import utils from "../utils/index.js";
+
 const register = async (req, res) => {
     try {
         const input = req.body;
@@ -10,7 +11,7 @@ const register = async (req, res) => {
         });
         //if user found
         if (existUser) {
-            return handlerResponseHelper(res, "BAD_REQUEST", {
+            return utils.handlerResponse(res, "BAD_REQUEST", {
                 message: "User is exist, get to Login!",
             });
         }
@@ -24,12 +25,12 @@ const register = async (req, res) => {
         //create user
         await usersSchema.create(createData);
         //return response
-        return handlerResponseHelper(res, "CREATED", {
+        return utils.handlerResponse(res, "CREATED", {
             message: "Register Success!",
         });
     } catch (error) {
         //return response error
-        return handlerResponseHelper(res, "INTERNAL_ERROR", {
+        return utils.handlerResponse(res, "INTERNAL_ERROR", {
             message: error.message || error,
         });
     }

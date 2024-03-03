@@ -1,7 +1,7 @@
 import express from "express";
 import db from "./configs/db.js";
-import router from "./routers.js";
 import utils from "./utils/index.js";
+import router from "./routers.js";
 
 const app = express();
 const PORT = utils.getEnv("PORT");

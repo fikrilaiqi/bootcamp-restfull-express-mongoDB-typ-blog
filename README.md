@@ -16,6 +16,13 @@ npm install mongoose
 
 membuat konfigurasi koneksi database dengan mongoose
 
+daftarkan url mongoDB pada file `.env`
+
+```console
+PORT=5500
+MONGODB_URL=mongodb://127.0.0.1:27017/blog_typi
+```
+
 membuat folder configs dan membuat file `db.js` didalamnya
 
 membuat module connectDb
@@ -23,9 +30,10 @@ membuat module connectDb
 ```js
 //db.js
 import mongoose from "mongoose";
+import utils from "../utils/index.js";
 const connectDb = async () => {
     try {
-        await mongoose.connect("mongodb://127.0.0.1:27017/blog_typi");
+        await mongoose.connect(utils.getEnv("MONGODB_URL"));
         console.log("MongoDB Connected!");
     } catch (error) {
         console.log("Connect MongoDB Error", error);
@@ -41,37 +49,14 @@ jalankan connectDb di app.js
 //app.js
 import express from "express";
 import db from "./src/configs/db.js";
+import utils from "./utils/index.js";
 
 const app = express();
-const PORT = 5500;
+const PORT = utils.getEnv("PORT");
 
 db.connectDb();
 
 app.use(express.json({ limit: "2MB" }));
-
-```console
-npm i dotenv
-
-```
-
-buat folder utils di folder src dan buat file `index.js` didalamnya
-
-```js
-// utils/index.js
-import dotenv from "dotenv";
-const getEnv = (key = "") => {
-    dotenv.config();
-    return process.env[`${key}`];
-};
-
-export default { getEnv };
-```
-
-karna file `.env` ini berisi informasi yang rahasia , kita masukan dalam `.gitignore` agar tidak terupload pada github repository .
-
-```console
-node_modules
-.env;
 ```
 
 kok tidak jalan ya connectDbnya ?, secara default nodeJS tidak melakukan hot reload apabila ada perubahan pada code yang sedang berjalan.
@@ -87,25 +72,28 @@ tambahan script baru , dengan command dev
 ```js
 //package.json
 {
-    "name": "server",
-    "version": "1.0.0",
-    "description": "Restfull API Typ! Blog",
-    "main": "app.js",
-    "type": "module",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node src/app.js",
-        "dev": "nodemon src/app.js"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "express": "^4.18.3",
-        "mongoose": "^8.2.0"
-    },
-    "devDependencies": {
-        "nodemon": "^3.1.0"
-    }
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Restfull API Typ! Blog",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.18.3",
+    "joi": "^17.12.2",
+    "mongoose": "^8.2.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
 }
 ```
 
@@ -246,12 +234,13 @@ router.post(
 );
 ```
 
-daftarkan semua router di main `app.js` dengan patch `/api/v1` sebagi middleware
+daftarkan semua router di main `app.js` dengan patch `/api/v1` sebagai middleware
 
 ```js
 //app.js
 import express from "express";
 import db from "./src/configs/db.js";
+import utils from "./utils/index.js";
 import router from "./src/routers.js";
 
 ...
@@ -284,10 +273,11 @@ git push origin 3.endpoint/auth-register
 
 agar code yang kita buat lebih terstruktur, mudah dibaca, meminimalisir duplikasi kode dan mudah dimaintance, kita pisahkan kode kita menjadi module-modul terpisah sesuai dengan konteksnya.
 
-1. membuat folder helpers dan membuat file `handlerResponseHelper.js` didalamnya
+1.  membuat utils handlerResponse
 
 ```js
-//handlerResponseHelper.js
+//utils/index.js
+...
 const getHttpCodeResponse = (type = "") => {
     switch (type) {
         case "OK":
@@ -313,7 +303,7 @@ const getHttpCodeResponse = (type = "") => {
     }
 };
 
-export const handlerResponseHelper = (res, type = "", additionalData = {}) => {
+const handlerResponse = (res, type = "", additionalData = {}) => {
     const httpCodeResponse = getHttpCodeResponse(type);
     return res
         .status(httpCodeResponse.code)
@@ -323,15 +313,16 @@ export const handlerResponseHelper = (res, type = "", additionalData = {}) => {
         })
         .end();
 };
+
+export default { getEnv, handlerResponse };
 ```
 
-2. membuat file `validationInputHelper.js` didalam folder helpers
+2. membuat utils validationInput
 
 ```js
-//validationInputHelper.js
-import { handlerResponseHelper } from "./handlerResponseHelper.js";
-
-export const validationInputHelper = (req, res, next, joiSchema, input) => {
+//utils/index.js
+...
+const validationInput = (req, res, next, joiSchema, input) => {
     try {
         if (!joiSchema || !input) {
             throw Error("schema and input is reqiured!");
@@ -348,6 +339,7 @@ export const validationInputHelper = (req, res, next, joiSchema, input) => {
         });
     }
 };
+export default { getEnv, handlerResponse, validationInput };
 ```
 
 3. membuat folder validations dan membuat file `authValidation.js` didalamnya
@@ -355,7 +347,8 @@ export const validationInputHelper = (req, res, next, joiSchema, input) => {
 ```js
 //authValidation.js
 import Joi from "joi";
-import { validationInputHelper } from "../helpers/validationInputHelper.js";
+import utils from "../utils/index.js";
+
 const register = (req, res, next) => {
     const input = req.body;
     //validation input
@@ -364,7 +357,7 @@ const register = (req, res, next) => {
         password: Joi.string().min(6).required(),
         fullname: Joi.string().min(8).required(),
     });
-    return validationInputHelper(req, res, next, schema, input);
+    return utils.validationInput(req, res, next, schema, input);
 };
 
 export default { register };
@@ -376,7 +369,8 @@ export default { register };
 //authController
 import bcrypt from "bcrypt";
 import usersSchema from "../schemas/usersSchema.js";
-import { handlerResponseHelper } from "../helpers/handlerResponseHelper.js";
+import utils from "../utils/index.js";
+
 const register = async (req, res) => {
     try {
         const input = req.body;
@@ -386,7 +380,7 @@ const register = async (req, res) => {
         });
         //if user found
         if (existUser) {
-            return handlerResponseHelper(res, "BAD_REQUEST", {
+            return utils.handlerResponse(res, "BAD_REQUEST", {
                 message: "User is exist, get to Login!",
             });
         }
@@ -400,12 +394,12 @@ const register = async (req, res) => {
         //create user
         await usersSchema.create(createData);
         //return response
-        return handlerResponseHelper(res, "CREATED", {
+        return utils.handlerResponse(res, "CREATED", {
             message: "Register Success!",
         });
     } catch (error) {
         //return response error
-        return handlerResponseHelper(res, "INTERNAL_ERROR", {
+        return utils.handlerResponse(res, "INTERNAL_ERROR", {
             message: error.message || error,
         });
     }
