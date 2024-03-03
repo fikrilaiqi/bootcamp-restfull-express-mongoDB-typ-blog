@@ -35,7 +35,7 @@ const connectDb = async () => {
 export default { connectDb };
 ```
 
-jalankan connectDb di index.js
+jalankan connectDb di app.js
 
 ```js
 //app.js
@@ -262,7 +262,7 @@ git push origin 3.endpoint/auth
 
 agar code yang kita buat lebih terstruktur, mudah dibaca, meminimalisir duplikasi kode dan mudah dimaintance, kita pisahkan kode kita menjadi module-modul terpisah sesuai dengan konteksnya.
 
-1. membuat folder helpers dan membuat `handlerResponseHelper.js`
+1. membuat folder helpers dan membuat file `handlerResponseHelper.js` didalamnya
 
 ```js
 //handlerResponseHelper.js
