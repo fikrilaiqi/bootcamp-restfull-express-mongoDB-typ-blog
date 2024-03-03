@@ -111,7 +111,7 @@ membuat folder schemas dan membuat file `usersSchema.js` di dalamnya
 //usersSchema.js
 import { Schema, model } from "mongoose";
 
-const userSchema = new Schema(
+const usersSchema = new Schema(
     {
         username: { type: String, required: true, unique: true },
         password: { type: String, required: true },
@@ -121,7 +121,7 @@ const userSchema = new Schema(
     { timestamps: true }
 );
 
-export default model("user", userSchema);
+export default model("user", usersSchema);
 ```
 
 membuat router endpoint `auth/register`
@@ -342,10 +342,10 @@ const validationInput = (req, res, next, joiSchema, input) => {
 export default { getEnv, handlerResponse, validationInput };
 ```
 
-3. membuat folder validations dan membuat file `authValidation.js` didalamnya
+3. membuat folder validations dan membuat file `authsValidation.js` didalamnya
 
 ```js
-//authValidation.js
+//authsValidation.js
 import Joi from "joi";
 import utils from "../utils/index.js";
 
@@ -363,10 +363,10 @@ const register = (req, res, next) => {
 export default { register };
 ```
 
-1. membuat folder controllers dan membuat file `authController.js` didalamnya
+1. membuat folder controllers dan membuat file `authsController.js` didalamnya
 
 ```js
-//authController
+//authsController
 import bcrypt from "bcrypt";
 import usersSchema from "../schemas/usersSchema.js";
 import utils from "../utils/index.js";
@@ -412,12 +412,16 @@ jangan lupa rubah middleware dan controller di endpoint routernya seperti beriku
 
 ```js
 import { Router } from "express";
-import authController from "./controllers/authController.js";
-import authValidation from "./validations/authValidation.js";
+import authsController from "./controllers/authsController.js";
+import authsValidation from "./validations/authsValidation.js";
 const router = Router();
 
 //auth
-router.post("/auth/register", authValidation.register, authController.register);
+router.post(
+    "/auth/register",
+    authsValidation.register,
+    authsController.register
+);
 
 export default router;
 ```
