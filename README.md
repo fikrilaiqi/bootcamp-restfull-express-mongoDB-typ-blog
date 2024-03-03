@@ -334,7 +334,7 @@ const validationInput = (req, res, next, joiSchema, input) => {
         }
         next();
     } catch (error) {
-        return handlerResponseHelper(res, `BAD_REQUEST`, {
+        return handlerResponse(res, `BAD_REQUEST`, {
             message: `Validation Error : ${error}`,
         });
     }
