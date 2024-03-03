@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const blogsSchema = new Schema(
+const blogSchema = new Schema(
     {
         content: { type: String, required: true },
         tags: { type: [String] },
@@ -11,4 +11,4 @@ const blogsSchema = new Schema(
     { timestamps: true }
 );
 
-export default model("blog", blogsSchema);
+export default model("blog", blogSchema);

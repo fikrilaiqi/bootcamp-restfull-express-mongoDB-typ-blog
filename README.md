@@ -8,14 +8,14 @@ membuat branch 6.endpoint/get-blog-all dan pindah ke branch :
 git checkout -b 6.endpoint/get-blog-all
 ```
 
-membuat `schema blogs`
-membuat file `blogsSchema.js` di folder schemas
+membuat `schema blog`
+membuat file `blogSchema.js` di folder schemas
 
 ```js
-//schemas/blogsSchema.js
+//schemas/blogSchema.js
 import { Schema, model } from "mongoose";
 
-const blogsSchema = new Schema(
+const blogSchema = new Schema(
     {
         content: { type: String, required: true },
         tags: { type: [String] },
@@ -26,23 +26,23 @@ const blogsSchema = new Schema(
     { timestamps: true }
 );
 
-export default model("blog", blogsSchema);
+export default model("blog", blogSchema);
 ```
 
-membuat file `blogsController.js` dan membuat module getBlogAll
+membuat file `blogController.js` dan membuat module getBlogAll
 
 ```js
-//blogsController.js
+//blogController.js
 const getBlogAll = async (req, res) => {
     try {
         //find All Blog and populate/join from ref
-        const response = await blogsSchema
+        const response = await blogSchema
             .find({})
             .populate("author_id", "username image");
 
         //return response
         return utils.handlerResponse(res, "OK", {
-            message: "Get All blog Success!",
+            message: "Get blog all Success!",
             data: response,
         });
     } catch (error) {
@@ -56,17 +56,17 @@ const getBlogAll = async (req, res) => {
 export default { getBlogAll };
 ```
 
-buat router HTTP Method `GET` dengan path `/blog` di file `routers.js`
+buat router HTTP Method `GET` dengan path `/blog/all` di file `routers.js`
 
 ```js
 //routers.js
 ...
-import blogsController from "./controllers/blogsController.js";
+import blogController from "./controllers/blogController.js";
 const router = Router();
 
 ...
 //blog
-router.get("/blog/all", blogsController.getBlogAll);
+router.get("/blog/all", blogController.getBlogAll);
 
 export default router;
 ```
