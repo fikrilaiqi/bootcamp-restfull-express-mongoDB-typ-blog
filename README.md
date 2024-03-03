@@ -8,7 +8,7 @@ membuat branch 6.endpoint/auth-refresh-token dan pindah ke branch :
 git checkout -b 6.endpoint/auth-refresh-token
 ```
 
-untuk melindungi akses routers/endpoints yang membutuhkan authentifikasi, kita harus memeriksa request yang masuk, apakah memiliki token valid atau tidak melalui middleware.
+> untuk melindungi akses routers/endpoints yang membutuhkan authentifikasi, kita harus memeriksa request yang masuk, apakah memiliki token valid atau tidak melalui middleware dan apabila secretnya tidak sama dengan yang disimpan server maka tidak akan lolos verifikasi.
 
 buat folder middlewares dan buat file `checkAuthMiddleware.js`
 
