@@ -8,13 +8,13 @@
 
 beberapa buildin middlware express yang sering digunakan :
 
-1. **express json** => memparsing request HTTP dengan content type aplication/json menjadi JSON, ketika kita melakukan HTTP method POST, PUT atau PATCH akan di simpan pada object request.body
-2. **express urlencoded** => memparsing request HTTP dengan content type aplication/x-www-form-urlencoded, ketika kita melakukan HTTP method POST, PUT atau PATCH akan di simpan pada object request.body
+1. `express.json()` => memparsing request HTTP dengan content type aplication/json menjadi JSON, ketika kita melakukan HTTP method POST, PUT atau PATCH akan di simpan pada object request.body
+2. `express.urlencoded()` => memparsing request HTTP dengan content type aplication/x-www-form-urlencoded, ketika kita melakukan HTTP method POST, PUT atau PATCH akan di simpan pada object request.body
 
 implematasi dalam code
 
 ```js
-//index.js
+//app.js
 ...
 
 app.use(express.json({ limit: "2MB" }));
@@ -34,11 +34,11 @@ git add .
 melakukan commit perubahan pada git
 
 ```console
-git commit -m "setup-middleware"
+git commit -m "setup-middleware-express"
 ```
 
 mengupload ke repository github
 
 ```console
-git push origin setup-middleware
+git push origin 2.setup-middleware-express
 ```
