@@ -1,128 +1,74 @@
 # RestFull API menggunakan Express dan MongoDB
 
-## Membuat endpoint Auth Login
+## Membuat endpoint Auth Refresh Token
 
-membuat branch 5.endpoint/auth-login dan pindah ke branch :
-
-```console
-git checkout -b 5.endpoint/auth-login
-```
-
-membuat modul login di file `authValidation.js`
-
-```js
-//authValidation.js
-...
-const login = (req, res, next) => {
-    const input = req.body;
-    //validation input
-    const schema = Joi.object({
-        username: Joi.string().min(6).required(),
-        password: Joi.string().min(6).required(),
-    });
-    return utils.validationInput(req, res, next, schema, input);
-};
-
-export default { register, login };
-```
-
-### jsonwebtoken
-
-> jsonwebtoken/JWT adalah sebuah token berbentuk string panjang yang sangat random yang fungsinya untuk melakukan sistem Autentikasi dan Pertukaran Informasi dan tidak disarankan untuk menyimpan data sensitif pada token, seperti password. Nantinya akan kita gunakan sebagai identitas authentifikasi pada server.
-
-ada 3 komponen dalam struktur JWT
-
--   `header` (algoritm & token type) => default configurasinya sperti berikut:
-
-```js
-{
-    "alg": "HS256",
-    "typ": "JTW"
-}
-
-```
-
--   `payload` => data yang akan dikirim, contohnya
-
-```js
-{
-    "_id":"12334455",
-    "username": "superadmin",
-    "fullname" : "Super Admin"
-}
-```
-
--   `verify signature` => hasil hash gabungan header , payload dan secret key
-
-```js
-HMACSHA256(
-    base64UrlEncode(header) + "." + base64UrlEncode(payload),
-    "your-256-bit-secret"
-);
-```
+membuat branch 6.endpoint/auth-refresh-token dan pindah ke branch :
 
 ```console
-npm i jsonwebtoken
+git checkout -b 5.endpoint/auth-refresh-token
 ```
 
-membuat utils `createToken`
+untuk melindungi akses routers/endpoints yang membutuhkan authentifikasi, kita harus memeriksa request yang masuk, apakah memiliki token valid atau tidak melalui middleware.
+
+buat folder middlewares dan buat file `checkAuthMiddleware.js`
 
 ```js
-//utils/index.js
-import dotenv from "dotenv";
+//checkAuthMiddleware.js
 import jwt from "jsonwebtoken";
-...
-const createToken = (payload = {}) => {
-    const secret = getEnv("JWT_SECRET");
-    return jwt.sign(payload, secret, {
-        expiresIn: "24h",
-    });
+import utils from "../utils/index.js";
+
+export const checkAuthMidddleware = (req, res, next) => {
+    try {
+        //put token in request header Authorization :  "Bearer <token>"
+        const authHeader = req.header("Authorization") || "";
+        //put token only
+        const token = authHeader && authHeader.split(" ").at(1);
+        //if token empty
+        if (!token) throw Error("Access Denied!");
+        //veryfy token with secret
+        const verified = jwt.verify(token, utils.getEnv("JWT_SECRET"));
+        //if not verified
+        if (!verified) throw Error("Invalid Token!");
+        //save data to req.authData
+        req.authData = verified;
+        //next process
+        next();
+    } catch (error) {
+        //error handler
+        return utils.handlerResponse(res, "UNAUTHORIZED", {
+            message: error.message || "Expired Token!",
+        });
+    }
 };
-
-export default { getEnv, handlerResponse, validationInput, createToken };
 ```
 
-membuat environment variable `JWT_SECRET` di file `.env` yang isinya random string
+`Refresh Token` ini digunakan untuk membuat token baru, jadi setiap ada request masuk maka token akan di perbaharui.
 
-```
-...
-JWT_SECRET=ncFal4i3yIdfkSDSDijasa36nsd3
-```
-
-membuat modul login di file `authController.js`
+membuat modul refreshToken di file `authController.js`
 
 ```js
 //authController.js
 ...
-const login = async (req, res) => {
-    try {
-        const input = req.body;
 
-        //find user exist
-        const existUser = await usersSchema.findOne({
-            username: input.username,
-        });
+const refreshToken = async (req, res) => {
+    try {
+        const { _id, ...rest } = req.authData;
+        //find user exist and hide password
+        const existUser = await usersSchema.findOne({ _id }, "-password");
         //if user not found
         if (!existUser) {
             return utils.handlerResponse(res, "NOT_FOUND", {
                 message: "User Not Found!",
             });
         }
-        //convert toObject() to access value
-        const { password: passUser, _id, ...rest } = existUser.toObject();
-        //compare password in database with input password
-        const isValid = await bcrypt.compare(input.password, passUser);
-        if (!isValid) {
-            return utils.handlerResponse(res, "BAD_REQUEST", {
-                message: "Invalid Password!",
-            });
-        }
-
         //return response
         return utils.handlerResponse(res, "OK", {
-            message: "Login Success!",
+            message: "Refresh Token Success!",
             data: {
-                token: utils.createToken({ _id: existUser._id, ...rest }),
+                token: utils.createToken({
+                    _id: existUser._id,
+                    ...existUser.toObject(),
+                }),
             },
         });
     } catch (error) {
@@ -133,21 +79,24 @@ const login = async (req, res) => {
     }
 };
 
-export default { register, login };
+export default { register, login, refreshToken };
 ```
 
-buat router HTTP Method `POST` dengan path `auth/login` di file `routers.js`
+buat router HTTP Method `GET` dengan path `auth/refresh-token` di file `routers.js`
 
 ```js
 //routers.js
-import { Router } from "express";
-import authController from "./controllers/authController.js";
-import authValidation from "./validations/authValidation.js";
+...
+import { checkAuthMidddleware } from "./middlewares/checkAuthMiddleware.js";
 const router = Router();
 
-//auth
-router.post("/auth/register", authValidation.register, authController.register);
+...
 router.post("/auth/login", authValidation.login, authController.login);
+router.post(
+    "/auth/refresh-token",
+    checkAuthMidddleware,
+    authController.refreshToken
+);
 
 export default router;
 ```
@@ -163,11 +112,11 @@ git add .
 melakukan commit perubahan
 
 ```console
-git commit -m "add endpoint auth login"
+git commit -m "add endpoint auth refresh token"
 ```
 
 mengupload ke repository github
 
 ```console
-git push origin 5.endpoint/auth-login
+git push origin 5.endpoint/auth-refresh-token
 ```

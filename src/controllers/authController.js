@@ -75,4 +75,33 @@ const login = async (req, res) => {
     }
 };
 
-export default { register, login };
+const refreshToken = async (req, res) => {
+    try {
+        const { _id, ...rest } = req.authData;
+        //find user exist and hide password
+        const existUser = await usersSchema.findOne({ _id }, "-password");
+        //if user not found
+        if (!existUser) {
+            return utils.handlerResponse(res, "NOT_FOUND", {
+                message: "User Not Found!",
+            });
+        }
+        //return response
+        return utils.handlerResponse(res, "OK", {
+            message: "Refresh Token Success!",
+            data: {
+                token: utils.createToken({
+                    _id: existUser._id,
+                    ...existUser.toObject(),
+                }),
+            },
+        });
+    } catch (error) {
+        //return response error
+        return utils.handlerResponse(res, "INTERNAL_ERROR", {
+            message: error.message || error,
+        });
+    }
+};
+
+export default { register, login, refreshToken };
