@@ -1,35 +1,14 @@
 # RestFull API menggunakan Express dan MongoDB
 
-## Membuat endpoint Get Blog All
+## Membuat endpoint Blog Create
 
-membuat branch 6.endpoint/get-blog-all dan pindah ke branch :
+membuat branch 6.endpoint/blog-create dan pindah ke branch :
 
 ```console
-git checkout -b 6.endpoint/get-blog-all
+git checkout -b 6.endpoint/blog-create
 ```
 
-membuat `schema blog`
-membuat file `blogSchema.js` di folder schemas
-
-```js
-//schemas/blogSchema.js
-import { Schema, model } from "mongoose";
-
-const blogSchema = new Schema(
-    {
-        content: { type: String, required: true },
-        tags: { type: [String] },
-        author_id: { type: Schema.Types.ObjectId, ref: "user", required: true },
-        title: { type: String, required: true },
-        thumbnail: { type: String },
-    },
-    { timestamps: true }
-);
-
-export default model("blog", blogSchema);
-```
-
-membuat file `blogController.js` dan membuat module getBlogAll
+membuat file `blogController.js` dan membuat module create
 
 ```js
 //blogController.js
@@ -88,5 +67,5 @@ git commit -m "add endpoint get blog all"
 mengupload ke repository github
 
 ```console
-git push origin 6.endpoint/get-blog-all
+git push origin 6.endpoint/blog-create
 ```
