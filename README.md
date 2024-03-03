@@ -1,6 +1,6 @@
 # RestFull API menggunakan Express dan MongoDB
 
-## Membuat endpoint Auth
+## Membuat endpoint Auth Register
 
 membuat branch 3.endpoint/auth-register dan pindah ke branch :
 
