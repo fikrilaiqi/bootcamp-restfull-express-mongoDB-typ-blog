@@ -65,7 +65,7 @@ HMACSHA256(
 npm i jsonwebtoken
 ```
 
-membuat utils createToken
+membuat utils `createToken`
 
 ```js
 //utils/index.js
