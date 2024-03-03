@@ -30,28 +30,25 @@ akan muncul file **package.json**, tambahkan konfigurasi berikut :
   "name": "server",
   "version": "1.0.0",
   "description": "Restfull API Typ! Blog",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node src/app.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+  }
 }
+
 ```
 
-1. **"description" : "Restfull API Typ! Blog"** Menambahkan Description
-2. **"type" : "module"** memberitahu nodeJs bahwa kita akan menggunakan format ES module (export import), secara default menggunakan "commonJs (required)
-3. **"start" : "node index.js"** membuat script start untuk menjalankan code
+1. `"description" : "Restfull API Typ! Blog"` => Menambahkan Description
+2. `"type" : "module"` => memberitahu nodeJs bahwa kita akan menggunakan format ES module (export import), secara default menggunakan "commonJs (required)
+3. `"start" : "node /src/app.js"` => membuat script start untuk menjalankan code
 
-Jangan lupa buat file **index.js** yang akan kita gunakan sebagai main code
-
-```console
-touch index.js
-```
-
-akan muncul file **index.js**, coba kita isikan dengan code
+buat folder src dan buat file `app.js` didalam folder src, yang akan kita gunakan sebagai main code
 
 ```js
 //index.js
@@ -69,7 +66,7 @@ npm start
 Instal package **express**
 
 ```console
-npm instal express --save
+npm i express
 ```
 
 setiap kita menginstall package maka akan terdaftar di **package.json** pada field dependencies
@@ -79,11 +76,11 @@ setiap kita menginstall package maka akan terdaftar di **package.json** pada fie
   "name": "server",
   "version": "1.0.0",
   "description": "Restfull API Typ! Blog",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node src/app.js"
   },
   "author": "",
   "license": "ISC",
@@ -133,25 +130,25 @@ dan isikan
 node_module
 ```
 
-medaftarkan semua perubahan pada repository ke version controll git, ketikan perintah
+medaftarkan semua perubahan pada repository local kita, ketikan perintah
 
 ```console
 git add .
 ```
 
-melakukan commit perubahan pada git
+melakukan commit perubahan
 
 ```console
 git commit -m "init server"
 ```
 
-mendaftarkan remote repository github pada repository git kita
+mendaftarkan remote repository github pada repository local kita
 
 ```console
 git remote add origin https://github.com/.....git
 ```
 
-mengupload ke repository github
+mengupload branch init-server ke repository github
 
 ```console
 git push origin init-server
