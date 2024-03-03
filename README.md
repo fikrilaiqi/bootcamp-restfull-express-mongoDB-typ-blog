@@ -42,7 +42,6 @@ export default { getEnv };
 karna file `.env` ini berisi informasi yang rahasia , kita masukan dalam `.gitignore` agar tidak terupload pada github repository .
 
 ```console
-//.gitignore
 node_modules
 .env;
 ```
