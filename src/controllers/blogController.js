@@ -1,10 +1,10 @@
-import blogSchemas from "../schemas/blogSchemas.js";
+import blogSchema from "../schemas/blogSchema.js";
 import utils from "../utils/index.js";
 
 const getAll = async (req, res) => {
     try {
         //find blog all and populate/join from ref
-        const response = await blogSchemas
+        const response = await blogSchema
             .find({})
             .populate("author_id", "username image");
 

@@ -8,6 +8,30 @@ membuat branch 6.endpoint/blog-create dan pindah ke branch :
 git checkout -b 6.endpoint/blog-create
 ```
 
+untuk menghandle upload file, install package `express-fileupload`
+
+```console
+npm i express-fileupload
+```
+
+setup middleware fileUpload di file main `app.js`
+
+membuat folder `upload` dan set menjadi static dengan path `/upload`, di middleware express , agar dapat diakses secara public.
+
+```js
+...
+import fileUpload from "express-fileupload";
+...
+app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload({ limits: { fileSize: 10 * 1024 * 1024 } }));
+app.use("/api/v1", router);
+app.use("/upload", express.static("upload"));
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+```
+
 membuat file `blogValidation.js` di folder validations
 
 ```js
@@ -79,6 +103,14 @@ const processUploadFile = (file, oldFileName) => {
 };
 
 export default { getEnv, handlerResponse, validationInput, createToken, processUploadFile };
+```
+
+membuat folder `upload` di root folder, agar tidak error ketika upload file dan daftarkan pada file `.gitignore` agar tidak ikut terupload github repository
+
+```console
+node_modules
+.env
+folder/*
 ```
 
 membuat file `blogController.js` dan membuat module create
