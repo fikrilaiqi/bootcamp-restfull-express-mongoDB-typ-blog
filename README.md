@@ -63,7 +63,7 @@ npm start
 
 ## Membuat server menggunakan ExpressJs
 
-Instal package **express**
+Instal package `express`
 
 ```console
 npm i express
@@ -90,7 +90,7 @@ setiap kita menginstall package maka akan terdaftar di **package.json** pada fie
 }
 ```
 
-buka file **index.js**
+buka file `app.js`
 
 membuat aplication dengan express
 
