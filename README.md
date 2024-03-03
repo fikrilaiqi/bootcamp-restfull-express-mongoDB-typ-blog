@@ -54,7 +54,7 @@ const refreshToken = async (req, res) => {
     try {
         const { _id, ...rest } = req.authData;
         //find user exist and hide password
-        const existUser = await usersSchema.findOne({ _id }, "-password");
+        const existUser = await userSchema.findOne({ _id }, "-password");
         //if user not found
         if (!existUser) {
             return utils.handlerResponse(res, "NOT_FOUND", {
