@@ -288,3 +288,133 @@ mengupload ke repository github
 ```console
 git push origin endpoint/auth
 ```
+
+## Membuat code menjadi modular
+
+agar code yang kita buat lebih terstruktur, mudah dibaca dan mudah dimaintance, kita pisahkan kode kita menjadi module modul terpisah.
+
+masuk ke folder src
+
+```console
+cd src/
+```
+
+1. membuat folder controllers dan membuat file authController.js didalam folder controller
+
+```console
+mkdir controllers && cd controllers/ && touch authController.js
+```
+
+```js
+//authController
+import bcrypt from "bcrypt";
+import usersSchema from "../schemas/usersSchema.js";
+const login = async (req, res) => {
+    try {
+        const input = req.body;
+        //find user exist
+        const existUser = await usersSchema.findOne({
+            username: input.username,
+        });
+        //if user found
+        if (existUser) {
+            return res.status(400).json({
+                status: "error",
+                message: "User is exist, get to Login!",
+                code: 400,
+            });
+        }
+        //hash password
+        const hashedPassword = await bcrypt.hash(input.password, 10);
+        const createData = {
+            ...input,
+            password: hashedPassword,
+        };
+
+        //create user
+        await usersSchema.create(createData);
+        //return response
+        return res.status(201).json({
+            status: "success",
+            message: "Register Success!",
+            code: 201,
+        });
+    } catch (error) {
+        //return response error
+        return res
+            .status(500)
+            .json({
+                status: "error",
+                message: error?.message || error || "internal server error",
+                code: 500,
+            })
+            .end();
+    }
+};
+
+export default { login };
+```
+
+3. membuat folder helpers dan membuat file validationInputHelper.js didalam folder helpers
+
+```console
+mkdir helpers && cd helpers/ && touch validationInputHelper.js
+```
+
+```js
+//validationInputHelper.js
+export const validationInputHelper = (req, res, next, joiSchema, input) => {
+    try {
+        if (!schema || !input) {
+            throw Error("schema and input is reqiured");
+        }
+        const { error } = joiSchema.validate(input);
+        //if error return status 400
+        if (error) {
+            return res
+                .status(400)
+                .json({
+                    status: "error",
+                    message: error.details.at(0).message,
+                    code: 400,
+                })
+                .end();
+        }
+        next();
+    } catch (error) {
+        return res
+            .status(400)
+            .json({
+                status: "error",
+                message: `Validation Error : ${error}`,
+                code: 400,
+            })
+            .end();
+    }
+};
+```
+
+4. membuat folder validations dan membuat file authValidation.js didalam folder validations
+
+```console
+mkdir validations && cd validations/ && touch authValidation.js
+```
+
+```js
+//authValidation.js
+import Joi from "joi";
+import Joi from "joi";
+import { validationInputHelper } from "../helpers/validationInputHelper.js";
+const login = (req, res, next) => {
+    const input = req.body;
+    //validation input
+    const schema = Joi.object({
+        username: Joi.string().min(6).required(),
+        password: Joi.string().min(6).required(),
+        fullname: Joi.string().min(8).required(),
+    });
+    return validationInputHelper(req, res, next, schema, input);
+};
+
+export default { login };
+```
