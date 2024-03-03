@@ -116,7 +116,7 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 ```
 
-membuat file **.gitignore**, untuk mencegah file/folder terupload ketika kita upload ke github, contohnya node_module karna akan memperbesar ukuran repository kita
+membuat file **.gitignore**, untuk mencegah file/folder terupload ketika kita upload ke github, contohnya node_module karna akan memperbesar ukuran repository github kita
 
 ## Mendaftarkan history perubahan repository local dan upload ke github
 
