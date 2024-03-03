@@ -103,15 +103,15 @@ lalu jalankan ulang dengan perintah
 npm run dev
 ```
 
-membuat `schema users`
+membuat `schema user`
 
-membuat folder schemas dan membuat file `usersSchema.js` di dalamnya
+membuat folder schemas dan membuat file `userSchema.js` di dalamnya
 
 ```js
-//usersSchema.js
+//userSchema.js
 import { Schema, model } from "mongoose";
 
-const usersSchema = new Schema(
+const userSchema = new Schema(
     {
         username: { type: String, required: true, unique: true },
         password: { type: String, required: true },
@@ -121,7 +121,7 @@ const usersSchema = new Schema(
     { timestamps: true }
 );
 
-export default model("user", usersSchema);
+export default model("user", userSchema);
 ```
 
 membuat router endpoint `auth/register`
@@ -142,7 +142,7 @@ buat file routers dan buat router HTTP Method `POST` dengan path `auth/register`
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import Joi from "joi";
-import usersSchema from "./schemas/usersSchema.js";
+import userSchema from "./schemas/userSchema.js";
 const router = Router();
 
 router.post(
@@ -186,7 +186,7 @@ router.post(
             const input = req.body;
 
             //find user exist,  hide password and timestamp
-            const existUser = await usersSchema.findOne({
+            const existUser = await userSchema.findOne({
                 username: input.username,
             });
             //if user found
@@ -209,7 +209,7 @@ router.post(
             };
 
             //create user
-            await usersSchema.create(createData);
+            await userSchema.create(createData);
             //return response
             return res
                 .status(201)
@@ -342,10 +342,10 @@ const validationInput = (req, res, next, joiSchema, input) => {
 export default { getEnv, handlerResponse, validationInput };
 ```
 
-3. membuat folder validations dan membuat file `authsValidation.js` didalamnya
+3. membuat folder validations dan membuat file `authValidation.js` didalamnya
 
 ```js
-//authsValidation.js
+//authValidation.js
 import Joi from "joi";
 import utils from "../utils/index.js";
 
@@ -363,19 +363,19 @@ const register = (req, res, next) => {
 export default { register };
 ```
 
-1. membuat folder controllers dan membuat file `authsController.js` didalamnya
+1. membuat folder controllers dan membuat file `authController.js` didalamnya
 
 ```js
-//authsController
+//authController
 import bcrypt from "bcrypt";
-import usersSchema from "../schemas/usersSchema.js";
+import userSchema from "../schemas/userSchema.js";
 import utils from "../utils/index.js";
 
 const register = async (req, res) => {
     try {
         const input = req.body;
         //find user exist
-        const existUser = await usersSchema.findOne({
+        const existUser = await userSchema.findOne({
             username: input.username,
         });
         //if user found
@@ -392,7 +392,7 @@ const register = async (req, res) => {
         };
 
         //create user
-        await usersSchema.create(createData);
+        await userSchema.create(createData);
         //return response
         return utils.handlerResponse(res, "CREATED", {
             message: "Register Success!",
@@ -412,16 +412,12 @@ jangan lupa rubah middleware dan controller di endpoint routernya seperti beriku
 
 ```js
 import { Router } from "express";
-import authsController from "./controllers/authsController.js";
-import authsValidation from "./validations/authsValidation.js";
+import authController from "./controllers/authController.js";
+import authValidation from "./validations/authValidation.js";
 const router = Router();
 
 //auth
-router.post(
-    "/auth/register",
-    authsValidation.register,
-    authsController.register
-);
+router.post("/auth/register", authValidation.register, authController.register);
 
 export default router;
 ```

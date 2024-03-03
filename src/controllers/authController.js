@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import usersSchema from "../schemas/usersSchema.js";
+import usersSchema from "../schemas/userSchema.js";
 import utils from "../utils/index.js";
 
 const register = async (req, res) => {
