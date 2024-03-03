@@ -1,12 +1,12 @@
 import bcrypt from "bcrypt";
-import usersSchema from "../schemas/userSchema.js";
+import userSchema from "../schemas/userSchema.js";
 import utils from "../utils/index.js";
 
 const register = async (req, res) => {
     try {
         const input = req.body;
         //find user exist
-        const existUser = await usersSchema.findOne({
+        const existUser = await userSchema.findOne({
             username: input.username,
         });
         //if user found
@@ -23,7 +23,7 @@ const register = async (req, res) => {
         };
 
         //create user
-        await usersSchema.create(createData);
+        await userSchema.create(createData);
         //return response
         return utils.handlerResponse(res, "CREATED", {
             message: "Register Success!",
