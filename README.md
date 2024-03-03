@@ -8,10 +8,10 @@ Buka terminal lalu ketik perintah :
 git init
 ```
 
-membuat branch init-server dan pindah ke branc :
+membuat branch 1.init-server dan pindah ke branch :
 
 ```console
-git checkout -b "init-server"
+git checkout -b "1.init-server"
 ```
 
 ## Membuat project NodeJs
@@ -22,7 +22,7 @@ Buka terminal lalu ketik perintah :
 npm init
 ```
 
-akan muncul file **package.json**, tambahkan konfigurasi berikut :
+akan muncul file `package.json`, tambahkan konfigurasi berikut :
 
 ```js
 //package.json
@@ -151,5 +151,5 @@ git remote add origin https://github.com/.....git
 mengupload branch init-server ke repository github
 
 ```console
-git push origin init-server
+git push origin 1.init-server
 ```
