@@ -8,10 +8,10 @@ membuat branch 5.endpoint/auth-login dan pindah ke branch :
 git checkout -b 5.endpoint/auth-login
 ```
 
-membuat modul login di file `authsValidation.js`
+membuat modul login di file `authValidation.js`
 
 ```js
-//authsValidation.js
+//authValidation.js
 ...
 const login = (req, res, next) => {
     const input = req.body;
@@ -89,17 +89,17 @@ membuat environment variable `JWT_SECRET` di file `.env` yang isinya random stri
 JWT_SECRET=ncFal4i3yIdfkSDSDijasa36nsd3
 ```
 
-membuat modul login di file `authsController.js`
+membuat modul login di file `authController.js`
 
 ```js
-//authsController.js
+//authController.js
 ...
 const login = async (req, res) => {
     try {
         const input = req.body;
 
         //find user exist
-        const existUser = await usersSchema.findOne({
+        const existUser = await userSchema.findOne({
             username: input.username,
         });
         //if user not found
@@ -141,17 +141,13 @@ buat router HTTP Method `POST` dengan path `auth/login` di file `routers.js`
 ```js
 //routers.js
 import { Router } from "express";
-import authsController from "./controllers/authsController.js";
-import authsValidation from "./validations/authsValidation.js";
+import authController from "./controllers/authController.js";
+import authValidation from "./validations/authValidation.js";
 const router = Router();
 
 //auth
-router.post(
-    "/auth/register",
-    authsValidation.register,
-    authsController.register
-);
-router.post("/auth/login", authsValidation.login, authsController.login);
+router.post("/auth/register", authValidation.register, authController.register);
+router.post("/auth/login", authValidation.login, authController.login);
 
 export default router;
 ```
