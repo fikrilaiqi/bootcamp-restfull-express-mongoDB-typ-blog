@@ -1,4 +1,6 @@
 import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+
 const getEnv = (key = "") => {
     dotenv.config();
     return process.env[`${key}`];
@@ -12,8 +14,11 @@ const getHttpCodeResponse = (type = "") => {
             return { code: 201, status: "success" };
         case "BAD_REQUEST":
             return { code: 400, status: "error" };
+
         case "UNAUTHORIZED":
             return { code: 401, status: "error" };
+        case "NOT_FOUND":
+            return { code: 404, status: "error" };
         case "INTERNAL_ERROR":
             return {
                 code: 500,
@@ -58,4 +63,11 @@ export const validationInput = (req, res, next, joiSchema, input) => {
     }
 };
 
-export default { getEnv, handlerResponse, validationInput };
+const createToken = (payload = {}) => {
+    const secret = getEnv("JWT_SECRET");
+    return jwt.sign(payload, secret, {
+        expiresIn: "24h",
+    });
+};
+
+export default { getEnv, handlerResponse, validationInput, createToken };

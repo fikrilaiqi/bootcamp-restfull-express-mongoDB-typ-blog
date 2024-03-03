@@ -12,4 +12,14 @@ const register = (req, res, next) => {
     return utils.validationInput(req, res, next, schema, input);
 };
 
-export default { register };
+const login = (req, res, next) => {
+    const input = req.body;
+    //validation input
+    const schema = Joi.object({
+        username: Joi.string().min(6).required(),
+        password: Joi.string().min(6).required(),
+    });
+    return utils.validationInput(req, res, next, schema, input);
+};
+
+export default { register, login };
