@@ -200,13 +200,13 @@ router.post(
             }
             //hash password
             const hashedPassword = await bcrypt.hash(input.password, 10);
-
+            //object create
             const createData = {
                 ...input,
                 password: hashedPassword,
             };
 
-            //create user
+            //insert database
             await userSchema.create(createData);
             //return response
             return res
@@ -387,12 +387,13 @@ const register = async (req, res) => {
         }
         //hash password
         const hashedPassword = await bcrypt.hash(input.password, 10);
+        //object create
         const createData = {
             ...input,
             password: hashedPassword,
         };
 
-        //create user
+        //insert in database
         await userSchema.create(createData);
         //return response
         return utils.handlerResponse(res, "CREATED", {
