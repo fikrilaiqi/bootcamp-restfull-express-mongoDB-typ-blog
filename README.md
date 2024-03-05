@@ -2,10 +2,10 @@
 
 ## Membuat endpoint Get Blog All
 
-membuat branch 6.endpoint/get-blog-all dan pindah ke branch :
+membuat branch 7.endpoint/get-blog-all dan pindah ke branch :
 
 ```console
-git checkout -b 6.endpoint/get-blog-all
+git checkout -b 7.endpoint/get-blog-all
 ```
 
 membuat `schema blog`
@@ -88,5 +88,5 @@ git commit -m "add endpoint get blog all"
 mengupload ke repository github
 
 ```console
-git push origin 6.endpoint/get-blog-all
+git push origin 7.endpoint/get-blog-all
 ```
