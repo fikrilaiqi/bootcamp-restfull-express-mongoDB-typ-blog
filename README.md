@@ -2,44 +2,66 @@
 
 ## Membuat endpoint Get Blog By Id
 
-membuat branch 12.endpoint/blog-history-by-author-id dan pindah ke branch :
+membuat branch 13.endpoint/bookmark-history-user-by-blog-id dan pindah ke branch :
 
 ```console
-git checkout -b 12.endpoint/blog-history-by-author-id
+git checkout -b 13.endpoint/bookmark-history-user-by-blog-id
 ```
 
-membuat module `deleteById` di file `blogController.js`
+membuat `schema bookmark`
+membuat file `bookmarkSchema.js` di dalam folder schemas
 
 ```js
-//blogController.js
-...
-const historyByAuthorId = async (req, res) => {
+//bookmarkSchema.js
+import { Schema, model } from "mongoose";
+
+const bookmakSchema = new Schema(
+    {
+        blog_id: { type: Schema.Types.ObjectId, ref: "blog", required: true },
+        user_id: { type: Schema.Types.ObjectId, ref: "user", required: true },
+    },
+    { timestamps: true }
+);
+
+export default model("bookmark", bookmakSchema);
+```
+
+membuat file `bookmarkController.js` di folder controller dan membuat module `historyByBlogId`
+
+```js
+//bookmarkController.js
+import bookmarkSchema from "../schemas/bookmarkSchema";
+import utils from "../utils/index.js";
+
+const historyUserByBlogId = async (req, res) => {
     try {
-        const { authorId } = req.params;
-        const response = await blogSchema
-            .find({ author_id: authorId })
-            .populate("author_id", "username image");
+        //access BlogId from endpoint parameter
+        const { blogId } = req.params;
+        //access authorId from authData
+        const userId = req.authData;
+        //find in database
+        const response = await bookmarkSchema.findOne({
+            blog_id: blogId,
+            user_id: userId,
+        });
+
+        //return response
         return utils.handlerResponse(res, "OK", {
-            message: "Get Blog History By Author Id Success!",
+            message: "Get History by blog id Success!",
+            data: response,
         });
     } catch (error) {
+        //return response error
         return utils.handlerResponse(res, "INTERNAL_ERROR", {
             message: error.message || error,
         });
     }
 };
 
-export default {
-    getAll,
-    create,
-    getById,
-    editById,
-    deleteById,
-    historyByAuthorId,
-};
+export default { historyUserByBlogId };
 ```
 
-buat router HTTP Method `GET` dengan path `/blog/history/:authorId` di file `routers.js`
+buat router HTTP Method `GET` dengan path `/bookmark/history-user/:BlogId` di file `routers.js`
 
 ```js
 //routers.js
@@ -68,11 +90,11 @@ git add .
 melakukan commit perubahan
 
 ```console
-git commit -m "add endpoint blog history by author id"
+git commit -m "add endpoint bookmark history user by blog id"
 ```
 
 mengupload ke repository github
 
 ```console
-git push origin 12.endpoint/blog-history-by-author-id
+git push origin 13.endpoint/bookmark-history-user-by-blog-id
 ```
