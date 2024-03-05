@@ -45,7 +45,7 @@ export default { getAll, create, getById };
 
 untuk membuat path parameter yang dinamis, seperti id, cukup tambahkan `:` didepan nama parameternya
 
-buat router HTTP Method `GET` dengan path `/blog/:id` di file `routers.js`
+membuat router HTTP Method `GET` dengan path `/blog/:id` di file `routers.js`
 
 ```js
 //routers.js
