@@ -2,37 +2,40 @@
 
 ## Membuat endpoint Get Blog By Id
 
-membuat branch endpoint/bookmark-history-by-user-id dan pindah ke branch :
+membuat branch 16.endpoint/bookmark/delete-by-blog-id dan pindah ke branch :
 
 ```console
-git checkout -b endpoint/bookmark-history-by-user-id
+git checkout -b 16.endpoint/bookmark/delete-by-blog-id
 ```
 
-membuat module `historyByUserId` di file `bookmarkController.js`
+membuat module `deleteByBlogId` di file `bookmarkController.js`
 
 ```js
 //bookmarkController.js
-const historyByUserId = async (req, res) => {
+const deleteByBlogId = async (req, res) => {
     try {
-        //access userId from endpoint parameter
-        const { userId } = req.params;
-        //find bookmark by userId
-        const response = await bookmarkSchema.find({ user_id: userId });
-
-        //get All UserId and save in array
-        const blogIds = [];
-        for (let i = 0; i < response?.length; i++) {
-            const { blog_id } = response[i];
-            result.push(blog_id);
+        //access blogId from endpoint parameter
+        const { blogId } = req.params;
+        //access userId from authData
+        const userId = req.authData;
+        //defaine filter
+        const filter = {
+            user_id: userId,
+            blog_id: blogId,
+        };
+        //exits bookmark
+        const existBookmark = await bookmarkSchema.findOne(filter);
+        //if not found bookmark
+        if (!existBookmark) {
+            return utils.handlerResponse(res, `NOT_FOUND`, {
+                message: "Not Found Bookmark!",
+            });
         }
-
-        //find blog by blogIds and populate author_id
-        const getBlogs = await blogsSchema
-            .find({ _id: { $in: blogIds } })
-            .populate("author_id", "username image");
+        //delete bookmark in database
+        await bookmarkSchema.deleteOne(filter);
         //return response
         return utils.handlerResponse(res, "OK", {
-            message: "Get History by user id Success!",
+            message: "Delete Bookmark by blog id Success!",
             data: getBlogs,
         });
     } catch (error) {
@@ -43,10 +46,10 @@ const historyByUserId = async (req, res) => {
     }
 };
 
-export default { create, historyUserByBlogId, historyByUserId };
+export default { create, historyUserByBlogId, historyByUserId, deleteByBlogId };
 ```
 
-buat router HTTP Method `GET` dengan path `/bookmark/history-user/:blogId` di file `routers.js`
+buat router HTTP Method `DELETE` dengan path `/bookmark/delete/:blogId` di file `routers.js`
 
 ```js
 //routers.js
@@ -77,11 +80,11 @@ git add .
 melakukan commit perubahan
 
 ```console
-git commit -m "add endpoint bookmark history by user id"
+git commit -m "add endpoint bookmark delete by blog id"
 ```
 
 mengupload ke repository github
 
 ```console
-git push origin endpoint/bookmark-history-by-user-id
+git push origin 16.endpoint/bookmark/delete-by-blog-id
 ```

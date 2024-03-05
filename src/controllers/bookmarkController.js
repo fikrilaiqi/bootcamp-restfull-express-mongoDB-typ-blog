@@ -57,7 +57,7 @@ const historyUserByBlogId = async (req, res) => {
 
         //return response
         return utils.handlerResponse(res, "OK", {
-            message: "Get History user by blog id Success!",
+            message: "Get Bookmark History user by blog id Success!",
             data: { count: response ? 1 : 0 },
         });
     } catch (error) {
@@ -88,7 +88,7 @@ const historyByUserId = async (req, res) => {
             .populate("author_id", "username image");
         //return response
         return utils.handlerResponse(res, "OK", {
-            message: "Get History by user id Success!",
+            message: "Get Bookmark History by user id Success!",
             data: getBlogs,
         });
     } catch (error) {
@@ -99,4 +99,37 @@ const historyByUserId = async (req, res) => {
     }
 };
 
-export default { create, historyUserByBlogId, historyByUserId };
+const deleteByBlogId = async (req, res) => {
+    try {
+        //access blogId from endpoint parameter
+        const { blogId } = req.params;
+        //access userId from authData
+        const userId = req.authData;
+        //defaine filter
+        const filter = {
+            user_id: userId,
+            blog_id: blogId,
+        };
+        //exits bookmark
+        const existBookmark = await bookmarkSchema.findOne(filter);
+        //if not found bookmark
+        if (!existBookmark) {
+            return utils.handlerResponse(res, `NOT_FOUND`, {
+                message: "Not Found Bookmark!",
+            });
+        }
+        //delete bookmark in database
+        await bookmarkSchema.deleteOne(filter);
+        //return response
+        return utils.handlerResponse(res, "OK", {
+            message: "Delete Bookmark by blog id Success!",
+        });
+    } catch (error) {
+        //return response error
+        return utils.handlerResponse(res, "INTERNAL_ERROR", {
+            message: error.message || error,
+        });
+    }
+};
+
+export default { create, historyUserByBlogId, historyByUserId, deleteByBlogId };
