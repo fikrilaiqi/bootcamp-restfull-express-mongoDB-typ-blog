@@ -2,10 +2,10 @@
 
 ## Membuat endpoint Get Blog By Id
 
-membuat branch 18.endpoint/user-edit-by-id dan pindah ke branch :
+membuat branch 18.endpoint/user-edit-profile dan pindah ke branch :
 
 ```console
-git checkout -b 18.endpoint/user-edit-by-id
+git checkout -b 18.endpoint/user-edit-profile
 ```
 
 membuat file userValidation di folder validations dan membuat module editById
@@ -120,5 +120,5 @@ git commit -m "add endpoint user edit by id"
 mengupload ke repository github
 
 ```console
-git push origin 18.endpoint/user-edit-by-id
+git push origin 18.endpoint/user-edit-profile
 ```
