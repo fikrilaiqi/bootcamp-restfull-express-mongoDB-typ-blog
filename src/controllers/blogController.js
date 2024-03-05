@@ -170,15 +170,19 @@ const deleteById = async (req, res) => {
 
 const historyByAuthorId = async (req, res) => {
     try {
+        //take author id from path params
         const { authorId } = req.params;
+        //find and populate author_id
         const response = await blogSchema
             .find({ author_id: authorId })
             .populate("author_id", "username image");
+        //return reponse
         return utils.handlerResponse(res, "OK", {
             message: "Get Blog History By Author Id Success!",
             data: response,
         });
     } catch (error) {
+        //return if error
         return utils.handlerResponse(res, "INTERNAL_ERROR", {
             message: error.message || error,
         });

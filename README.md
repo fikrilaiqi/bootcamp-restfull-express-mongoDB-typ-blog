@@ -1,6 +1,6 @@
 # RestFull API menggunakan Express dan MongoDB
 
-## Membuat endpoint Get Blog By Id
+## Membuat endpoint Get Blog history By author Id
 
 membuat branch 12.endpoint/blog-history-by-author-id dan pindah ke branch :
 
@@ -15,14 +15,19 @@ membuat module `deleteById` di file `blogController.js`
 ...
 const historyByAuthorId = async (req, res) => {
     try {
+        //take author id from path params
         const { authorId } = req.params;
+        //find and populate author_id
         const response = await blogSchema
             .find({ author_id: authorId })
             .populate("author_id", "username image");
+        //return reponse
         return utils.handlerResponse(res, "OK", {
             message: "Get Blog History By Author Id Success!",
+            data: response,
         });
     } catch (error) {
+        //return if error
         return utils.handlerResponse(res, "INTERNAL_ERROR", {
             message: error.message || error,
         });
