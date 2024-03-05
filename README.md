@@ -8,7 +8,7 @@ membuat branch 6.endpoint/auth-refresh-token dan pindah ke branch :
 git checkout -b 6.endpoint/auth-refresh-token
 ```
 
-> untuk melindungi akses routers/endpoints yang membutuhkan authentifikasi, kita harus memeriksa request yang masuk, apakah memiliki token valid atau tidak melalui middleware dan apabila secretnya tidak sama dengan yang disimpan server maka tidak akan lolos verifikasi.
+> untuk melindungi akses routers/endpoints yang membutuhkan authentifikasi,harus memeriksa terlebih dahulu request yang masuk, apakah memiliki token valid atau tidak melalui middleware dan apabila secretnya tidak sama dengan yang disimpan server maka tidak akan lolos verifikasi.
 
 buat folder middlewares dan buat file `checkAuthMiddleware.js`
 
@@ -52,6 +52,7 @@ membuat modul refreshToken di file `authController.js`
 
 const refreshToken = async (req, res) => {
     try {
+        //access authData
         const { _id, ...rest } = req.authData;
         //find user exist and hide password
         const existUser = await userSchema.findOne({ _id }, "-password");
@@ -82,7 +83,7 @@ const refreshToken = async (req, res) => {
 export default { register, login, refreshToken };
 ```
 
-buat router HTTP Method `GET` dengan path `auth/refresh-token` di file `routers.js`
+buat router HTTP Method `GET` dengan path `/auth/refresh-token` di file `routers.js`
 
 ```js
 //routers.js
