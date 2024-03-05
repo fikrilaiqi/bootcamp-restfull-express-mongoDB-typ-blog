@@ -2,10 +2,10 @@
 
 ## Membuat endpoint Get Blog By Id
 
-membuat branch 11.endpoint/blog-delete-by-id dan pindah ke branch :
+membuat branch 12.endpoint/blog-history-by-author-id dan pindah ke branch :
 
 ```console
-git checkout -b 11.endpoint/blog-delete-by-id
+git checkout -b 12.endpoint/blog-history-by-author-id
 ```
 
 membuat module `deleteById` di file `blogController.js`
@@ -13,53 +13,45 @@ membuat module `deleteById` di file `blogController.js`
 ```js
 //blogController.js
 ...
-const deleteById = async (req, res) => {
+const historyByAuthorId = async (req, res) => {
     try {
-        //put id from endpoint parameter
-        const { id } = req.params;
-        const existBlog = await blogSchema.findById(id);
-        //if not found
-        if (!existBlog) {
-            return utils.handlerResponse(res, "NOT_FOUND", {
-                message: "Blog Not Found!",
-            });
-        }
-        //remove file thumbnail in upload folder
-        utils.processUploadFile(false, existBlog?.thumbnail);
-        //delete in database
-        await blogSchema.deleteOne({ _id: id });
+        const { authorId } = req.params;
+        const response = await blogSchema
+            .find({ author_id: authorId })
+            .populate("author_id", "username image");
         return utils.handlerResponse(res, "OK", {
-            message: "Delete Blog Success!",
+            message: "Get Blog History By Author Id Success!",
         });
     } catch (error) {
-        //return response error
         return utils.handlerResponse(res, "INTERNAL_ERROR", {
             message: error.message || error,
         });
     }
 };
 
-export default { getAll, create, getById, editById, deleteById };
+export default {
+    getAll,
+    create,
+    getById,
+    editById,
+    deleteById,
+    historyByAuthorId,
+};
 ```
 
-buat router HTTP Method `DELETE` dengan path `/blog/delete/:id` di file `routers.js`
+buat router HTTP Method `GET` dengan path `/blog/history/:authorId` di file `routers.js`
 
 ```js
 //routers.js
 ...
 
-router.patch(
-    "/blog/edit/:id",
-    checkAuthMidddleware,
-    blogValidation.editById,
-    blogController.editById
-);
 
 router.delete(
     "/blog/delete/:id",
     checkAuthMidddleware,
     blogController.deleteById
 );
+router.get("/blog/history/:authorId", blogController.historyByAuthorId);
 
 export default router;
 
@@ -76,11 +68,11 @@ git add .
 melakukan commit perubahan
 
 ```console
-git commit -m "add endpoint blog delete by id"
+git commit -m "add endpoint blog history by author id"
 ```
 
 mengupload ke repository github
 
 ```console
-git push origin 11.endpoint/blog-delete-by-id
+git push origin 12.endpoint/blog-history-by-author-id
 ```

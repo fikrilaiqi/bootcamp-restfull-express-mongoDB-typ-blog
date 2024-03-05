@@ -168,4 +168,28 @@ const deleteById = async (req, res) => {
     }
 };
 
-export default { getAll, create, getById, editById, deleteById };
+const historyByAuthorId = async (req, res) => {
+    try {
+        const { authorId } = req.params;
+        const response = await blogSchema
+            .find({ author_id: authorId })
+            .populate("author_id", "username image");
+        return utils.handlerResponse(res, "OK", {
+            message: "Get Blog History By Author Id Success!",
+            data: response,
+        });
+    } catch (error) {
+        return utils.handlerResponse(res, "INTERNAL_ERROR", {
+            message: error.message || error,
+        });
+    }
+};
+
+export default {
+    getAll,
+    create,
+    getById,
+    editById,
+    deleteById,
+    historyByAuthorId,
+};

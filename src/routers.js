@@ -35,5 +35,6 @@ router.delete(
     checkAuthMidddleware,
     blogController.deleteById
 );
+router.get("/blog/history/:authorId", blogController.historyByAuthorId);
 
 export default router;
