@@ -2,32 +2,38 @@
 
 ## Membuat endpoint Get Blog By Id
 
-membuat branch 14.endpoint/bookmark-history-user-by-blog-id dan pindah ke branch :
+membuat branch endpoint/bookmark-history-by-user-id dan pindah ke branch :
 
 ```console
-git checkout -b 14.endpoint/bookmark-history-user-by-blog-id
+git checkout -b endpoint/bookmark-history-by-user-id
 ```
 
-membuat module `historyUserByBlogId` di file `bookmarkController.js`
+membuat module `historyByUserId` di file `bookmarkController.js`
 
 ```js
 //bookmarkController.js
-const historyUserByBlogId = async (req, res) => {
+const historyByUserId = async (req, res) => {
     try {
-        //access BlogId from endpoint parameter
-        const { blogId } = req.params;
-        //access authorId from authData
-        const userId = req.authData;
-        //find in database
-        const response = await bookmarkSchema.findOne({
-            blog_id: blogId,
-            user_id: userId,
-        });
+        //access userId from endpoint parameter
+        const { userId } = req.params;
+        //find bookmark by userId
+        const response = await bookmarkSchema.find({ user_id: userId });
 
+        //get All UserId and save in array
+        const blogIds = [];
+        for (let i = 0; i < response?.length; i++) {
+            const { blog_id } = response[i];
+            result.push(blog_id);
+        }
+
+        //find blog by blogIds and populate author_id
+        const getBlogs = await blogsSchema
+            .find({ _id: { $in: blogIds } })
+            .populate("author_id", "username image");
         //return response
         return utils.handlerResponse(res, "OK", {
-            message: "Get History user by blog id Success!",
-            data: { count: response ? 1 : 0 },
+            message: "Get History by user id Success!",
+            data: getBlogs,
         });
     } catch (error) {
         //return response error
@@ -37,7 +43,7 @@ const historyUserByBlogId = async (req, res) => {
     }
 };
 
-export default { create, historyUserByBlogId };
+export default { create, historyUserByBlogId, historyByUserId };
 ```
 
 buat router HTTP Method `GET` dengan path `/bookmark/history-user/:blogId` di file `routers.js`
@@ -47,17 +53,14 @@ buat router HTTP Method `GET` dengan path `/bookmark/history-user/:blogId` di fi
 ...
 
 //bookmark
-router.post(
-    "/bookmark/create",
-    checkAuthMidddleware,
-    bookmarkController.create
-);
 router.get(
     "/bookmark/history-user/:blogId",
     checkAuthMidddleware,
     bookmarkController.historyUserByBlogId
 );
 
+
+router.get("/bookmark/history/:userId", bookmarkController.historyByUserId);
 
 export default router;
 
@@ -74,11 +77,11 @@ git add .
 melakukan commit perubahan
 
 ```console
-git commit -m "add endpoint bookmark history user by blog id"
+git commit -m "add endpoint bookmark history by user id"
 ```
 
 mengupload ke repository github
 
 ```console
-git push origin 14.endpoint/bookmark-history-user-by-blog-id
+git push origin endpoint/bookmark-history-by-user-id
 ```

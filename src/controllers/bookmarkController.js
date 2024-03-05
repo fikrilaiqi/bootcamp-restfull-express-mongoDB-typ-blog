@@ -68,4 +68,35 @@ const historyUserByBlogId = async (req, res) => {
     }
 };
 
-export default { create, historyUserByBlogId };
+const historyByUserId = async (req, res) => {
+    try {
+        //access userId from endpoint parameter
+        const { userId } = req.params;
+        //find bookmark by userId
+        const response = await bookmarkSchema.find({ user_id: userId });
+
+        //get All UserId and save in array
+        const blogIds = [];
+        for (let i = 0; i < response?.length; i++) {
+            const { blog_id } = response[i];
+            blogIds.push(blog_id);
+        }
+
+        //find blog by blogIds and populate author_id
+        const getBlogs = await blogSchema
+            .find({ _id: { $in: blogIds } })
+            .populate("author_id", "username image");
+        //return response
+        return utils.handlerResponse(res, "OK", {
+            message: "Get History by user id Success!",
+            data: getBlogs,
+        });
+    } catch (error) {
+        //return response error
+        return utils.handlerResponse(res, "INTERNAL_ERROR", {
+            message: error.message || error,
+        });
+    }
+};
+
+export default { create, historyUserByBlogId, historyByUserId };

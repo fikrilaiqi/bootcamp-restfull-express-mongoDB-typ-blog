@@ -51,4 +51,6 @@ router.get(
     bookmarkController.historyUserByBlogId
 );
 
+router.get("/bookmark/history/:userId", bookmarkController.historyByUserId);
+
 export default router;
