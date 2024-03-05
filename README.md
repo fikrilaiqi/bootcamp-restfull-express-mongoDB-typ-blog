@@ -2,10 +2,10 @@
 
 ## Membuat endpoint Get Blog By Id
 
-membuat branch 13.endpoint/bookmark-create dan pindah ke branch :
+membuat branch 14.endpoint/bookmark-history-user-by-blog-id dan pindah ke branch :
 
 ```console
-git checkout -b 13.endpoint/bookmark-create
+git checkout -b 14.endpoint/bookmark-history-user-by-blog-id
 ```
 
 membuat `schema bookmark`
@@ -109,11 +109,11 @@ git add .
 melakukan commit perubahan
 
 ```console
-git commit -m "add endpoint bookmark create"
+git commit -m "add endpoint bookmark history user by blog id"
 ```
 
 mengupload ke repository github
 
 ```console
-git push origin 13.endpoint/bookmark-create
+git push origin 14.endpoint/bookmark-history-user-by-blog-id
 ```
