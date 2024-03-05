@@ -2,10 +2,10 @@
 
 ## Membuat endpoint Blog Create
 
-membuat branch 6.endpoint/blog-create dan pindah ke branch :
+membuat branch 8.endpoint/blog-create dan pindah ke branch :
 
 ```console
-git checkout -b 6.endpoint/blog-create
+git checkout -b 8.endpoint/blog-create
 ```
 
 untuk menghandle upload file, install package `express-fileupload`
@@ -194,5 +194,5 @@ git commit -m "add endpoint blog create"
 mengupload ke repository github
 
 ```console
-git push origin 6.endpoint/blog-create
+git push origin 8.endpoint/blog-create
 ```
