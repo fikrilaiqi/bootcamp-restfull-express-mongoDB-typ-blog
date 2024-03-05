@@ -112,7 +112,7 @@ node_modules
 .env
 ```
 
-membuat file `blogController.js` dan membuat module create
+membuat module create di file `blogController.js`
 
 ```js
 //blogController.js
