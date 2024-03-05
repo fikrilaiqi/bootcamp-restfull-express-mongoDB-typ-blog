@@ -8,64 +8,26 @@ membuat branch 14.endpoint/bookmark-history-user-by-blog-id dan pindah ke branch
 git checkout -b 14.endpoint/bookmark-history-user-by-blog-id
 ```
 
-membuat `schema bookmark`
-membuat file `bookmarkSchema.js` di dalam folder schemas
-
-```js
-//bookmarkSchema.js
-import { Schema, model } from "mongoose";
-
-const bookmakSchema = new Schema(
-    {
-        blog_id: { type: Schema.Types.ObjectId, ref: "blog", required: true },
-        user_id: { type: Schema.Types.ObjectId, ref: "user", required: true },
-    },
-    { timestamps: true }
-);
-
-export default model("bookmark", bookmakSchema);
-```
-
-membuat file `bookmarkController.js` di folder controllers dan membuat module `create`
+membuat module `historyUserByBlogId` di file `bookmarkController.js`
 
 ```js
 //bookmarkController.js
-import blogSchema from "../schemas/blogSchema.js";
-import bookmarkSchema from "../schemas/bookmarkSchema.js";
-import utils from "../utils/index.js";
-
-const create = async (req, res) => {
+const historyUserByBlogId = async (req, res) => {
     try {
-        const { blog_id } = req.body;
-        //access userId from authData
-        const userId = req.authData._id;
-        //find exits bookmark
-        const existBookmark = await bookmarkSchema.findOne({
+        //access BlogId from endpoint parameter
+        const { blogId } = req.params;
+        //access authorId from authData
+        const userId = req.authData;
+        //find in database
+        const response = await bookmarkSchema.findOne({
+            blog_id: blogId,
             user_id: userId,
-            blog_id,
         });
-        //if exist bookmark
-        if (existBookmark) {
-            return utils.handlerResponse(res, `BAD_REQUEST`, {
-                message: "Already Bookmark!",
-            });
-        }
-        //find blog
-        const blog = await blogSchema.findById(blog_id);
-        //id author and userid same
-        if (blog?.author_id?.toString() === userId) {
-            return utils.handlerResponse(res, `BAD_REQUEST`, {
-                message: "Author Not Allow Bookmark!",
-            });
-        }
-        //insert in database
-        await bookmarkSchema.create({
-            user_id: userId,
-            blog_id,
-        });
+
         //return response
         return utils.handlerResponse(res, "OK", {
-            message: "Create Bookmark Blog Success!",
+            message: "Get History user by blog id Success!",
+            data: { count: response ? 1 : 0 },
         });
     } catch (error) {
         //return response error
@@ -75,22 +37,25 @@ const create = async (req, res) => {
     }
 };
 
-export default { create };
+export default { create, historyUserByBlogId };
 ```
 
-buat router HTTP Method `POST` dengan path `/bookmark/create` di file `routers.js`
+buat router HTTP Method `GET` dengan path `/bookmark/history-user/:blogId` di file `routers.js`
 
 ```js
 //routers.js
 ...
-
-router.get("/blog/history/:authorId", blogController.historyByAuthorId);
 
 //bookmark
 router.post(
     "/bookmark/create",
     checkAuthMidddleware,
     bookmarkController.create
+);
+router.get(
+    "/bookmark/history-user/:blogId",
+    checkAuthMidddleware,
+    bookmarkController.historyUserByBlogId
 );
 
 

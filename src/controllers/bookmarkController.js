@@ -43,4 +43,29 @@ const create = async (req, res) => {
     }
 };
 
-export default { create };
+const historyUserByBlogId = async (req, res) => {
+    try {
+        //access BlogId from endpoint parameter
+        const { blogId } = req.params;
+        //access authorId from authData
+        const userId = req.authData;
+        //find in database
+        const response = await bookmarkSchema.findOne({
+            blog_id: blogId,
+            user_id: userId,
+        });
+
+        //return response
+        return utils.handlerResponse(res, "OK", {
+            message: "Get History user by blog id Success!",
+            data: { count: response ? 1 : 0 },
+        });
+    } catch (error) {
+        //return response error
+        return utils.handlerResponse(res, "INTERNAL_ERROR", {
+            message: error.message || error,
+        });
+    }
+};
+
+export default { create, historyUserByBlogId };

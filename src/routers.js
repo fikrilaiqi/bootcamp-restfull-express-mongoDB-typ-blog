@@ -45,4 +45,10 @@ router.post(
     bookmarkController.create
 );
 
+router.get(
+    "/bookmark/history-user/:blogId",
+    checkAuthMidddleware,
+    bookmarkController.historyUserByBlogId
+);
+
 export default router;
