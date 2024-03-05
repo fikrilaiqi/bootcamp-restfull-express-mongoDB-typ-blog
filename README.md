@@ -66,7 +66,7 @@ const toUploadFile = (file) => {
     try {
         //if file upload empty
         if (!file) return { ...result, error: "Not found file upload!" };
-        //access origin name
+        //take origin name
         const originName = file.name;
         //create unix timestamp
         const unixTimestamp = Math.round(Date.now());
