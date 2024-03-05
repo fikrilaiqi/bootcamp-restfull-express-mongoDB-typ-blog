@@ -1,6 +1,6 @@
 # RestFull API menggunakan Express dan MongoDB
 
-## Membuat endpoint Get Blog By Id
+## Membuat endpoint Bookmark Create
 
 membuat branch 13.endpoint/bookmark-create dan pindah ke branch :
 
@@ -37,7 +37,7 @@ import utils from "../utils/index.js";
 const create = async (req, res) => {
     try {
         const { blog_id } = req.body;
-        //access userId from authData
+        //take user id from authData
         const userId = req.authData._id;
         //find exits bookmark
         const existBookmark = await bookmarkSchema.findOne({
