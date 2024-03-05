@@ -85,4 +85,61 @@ const getById = async (req, res) => {
     }
 };
 
-export default { getAll, create, getById };
+const editById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const input = req.body;
+        const file = req.files;
+
+        //if replace thumbnail , old_thumbnail filename required!
+        if (file?.thumbnail && !input?.old_thumbnail) {
+            return utils.handlerResponse(res, `BAD_REQUEST`, {
+                message: "Found thumbnail file , old_thumbnail is required!",
+            });
+        }
+
+        const existBlog = await blogSchema.findById(id);
+        //if not found
+        if (!existBlog) {
+            return utils.handlerResponse(res, "NOT_FOUND", {
+                message: "Blog Not Found!",
+            });
+        }
+
+        //access authorId from authData
+        const authorId = req.authData._id;
+        //process upload file or replace file
+        const { fileName, error: fileUploadError } = utils.processUploadFile(
+            file?.thumbnail,
+            input?.old_thumbnail
+        );
+        //if error upload file
+        if (fileUploadError) {
+            throw Error(fileUploadError);
+        }
+        //update object
+        const updateBlogObj = {
+            ...input,
+            author_id: authorId,
+            thumbnail: fileName,
+            tags: input?.tags ? input?.tags.split(",") : "",
+        };
+        //update in database
+        await blogSchema.findByIdAndUpdate(
+            { _id: id },
+            {
+                $set: updateBlogObj,
+            }
+        );
+        return utils.handlerResponse(res, "OK", {
+            message: "Edit Blog Success!",
+        });
+    } catch (error) {
+        //return response error
+        return utils.handlerResponse(res, "INTERNAL_ERROR", {
+            message: error.message || error,
+        });
+    }
+};
+
+export default { getAll, create, getById, editById };

@@ -2,35 +2,86 @@
 
 ## Membuat endpoint Get Blog By Id
 
-membuat branch 9.endpoint/get-blog-by-id dan pindah ke branch :
+membuat branch 10.endpoint/blog-edit-by-id dan pindah ke branch :
 
 ```console
-git checkout -b 9.endpoint/get-blog-by-id
+git checkout -b 10.endpoint/blog-edit-by-id
 ```
 
-membuat module `getById` di file `blogController.js`
+membuat module validation `editById` di file `blogValidation.js`
+
+```js
+//blogValidation.js
+...
+const editById = (req, res, next) => {
+    const input = req.body;
+    //validation input
+    const schema = Joi.object({
+        content: Joi.string(),
+        tags: Joi.string(),
+        title: Joi.string(),
+        old_thumbnail: Joi.string(),
+        thumbnail: Joi.allow(),
+    });
+    return utils.validationInput(req, res, next, schema, input);
+};
+
+export default { create, editById };
+```
+
+membuat module `editById` di file `blogController.js`
 
 ```js
 //blogController.js
 ...
-const getById = async (req, res) => {
+const editById = async (req, res) => {
     try {
-        //put id from endpoint parameter
         const { id } = req.params;
-        //check exit blog
-        const existBlog = await blogSchema
-            .findOne({ _id: id })
-            .populate("author_id", "username image");
+        const input = req.body;
+        const file = req.files;
+
+        //if replace thumbnail , old_thumbnail filename required!
+        if (file?.thumbnail && !input?.old_thumbnail) {
+            return utils.handlerResponse(res, `BAD_REQUEST`, {
+                message: "Found thumbnail file , old_thumbnail is required!",
+            });
+        }
+
+        const existBlog = await blogSchema.findById(id);
         //if not found
         if (!existBlog) {
             return utils.handlerResponse(res, "NOT_FOUND", {
                 message: "Blog Not Found!",
             });
         }
-        //return response
+
+        //access authorId from authData
+        const authorId = req.authData._id;
+        //process upload file or replace file
+        const { fileName, error: fileUploadError } = utils.processUploadFile(
+            file?.thumbnail,
+            input?.old_thumbnail
+        );
+        //if error upload file
+        if (fileUploadError) {
+            throw Error(fileUploadError);
+        }
+        //update object
+        const updateBlogObj = {
+            ...input,
+            author_id: authorId,
+            thumbnail: fileName,
+            tags: input?.tags ? input?.tags.split(",") : "",
+        };
+        //update in database
+        await blogSchema.findByIdAndUpdate(
+            { _id: id },
+            {
+                $set: updateBlogObj,
+            }
+        );
         return utils.handlerResponse(res, "OK", {
-            message: "Get Blog by Id Success!",
-            data: existBlog.toObject(),
+            message: "Edit Blog Success!",
         });
     } catch (error) {
         //return response error
@@ -40,26 +91,25 @@ const getById = async (req, res) => {
     }
 };
 
-export default { getAll, create, getById };
+export default { getAll, create, getById, editById };
 ```
 
-untuk membuat path parameter yang dinamis, seperti id, cukup tambahkan `:` didepan nama parameternya
-
-buat router HTTP Method `GET` dengan path `/blog/:id` di file `routers.js`
+buat router HTTP Method `PATCH` dengan path `/blog/:id` di file `routers.js`
 
 ```js
 //routers.js
 ...
 
-router.post(
-    "/blog/create",
-    checkAuthMidddleware,
-    blogValidation.create,
-    blogController.create
-);
 router.get("/blog/:id", blogController.getById);
+router.patch(
+    "/blog/:id",
+    checkAuthMidddleware,
+    blogValidation.editById,
+    blogController.editById
+);
 
 export default router;
+
 ```
 
 ## Mendaftarkan history perubahan repository ke git dan upload ke github
@@ -73,11 +123,11 @@ git add .
 melakukan commit perubahan
 
 ```console
-git commit -m "add endpoint get blog by id"
+git commit -m "add endpoint blog edit by id"
 ```
 
 mengupload ke repository github
 
 ```console
-git push origin 9.endpoint/get-blog-by-id
+git push origin 10.endpoint/blog-edit-by-id
 ```

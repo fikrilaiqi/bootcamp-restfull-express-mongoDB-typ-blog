@@ -13,4 +13,17 @@ const create = (req, res, next) => {
     return utils.validationInput(req, res, next, schema, input);
 };
 
-export default { create };
+const editById = (req, res, next) => {
+    const input = req.body;
+    //validation input
+    const schema = Joi.object({
+        content: Joi.string(),
+        tags: Joi.string(),
+        title: Joi.string(),
+        old_thumbnail: Joi.string(),
+        thumbnail: Joi.allow(),
+    });
+    return utils.validationInput(req, res, next, schema, input);
+};
+
+export default { create, editById };
