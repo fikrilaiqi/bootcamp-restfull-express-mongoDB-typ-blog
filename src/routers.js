@@ -25,10 +25,15 @@ router.post(
 );
 router.get("/blog/:id", blogController.getById);
 router.patch(
-    "/blog/:id",
+    "/blog/edit/:id",
     checkAuthMidddleware,
     blogValidation.editById,
     blogController.editById
+);
+router.delete(
+    "/blog/delete/:id",
+    checkAuthMidddleware,
+    blogController.deleteById
 );
 
 export default router;

@@ -142,4 +142,30 @@ const editById = async (req, res) => {
     }
 };
 
-export default { getAll, create, getById, editById };
+const deleteById = async (req, res) => {
+    try {
+        //put id from endpoint parameter
+        const { id } = req.params;
+        const existBlog = await blogSchema.findById(id);
+        //if not found
+        if (!existBlog) {
+            return utils.handlerResponse(res, "NOT_FOUND", {
+                message: "Blog Not Found!",
+            });
+        }
+        //remove file thumbnail in upload folder
+        utils.processUploadFile(false, existBlog?.thumbnail);
+        //delete in database
+        await blogSchema.deleteOne({ _id: id });
+        return utils.handlerResponse(res, "OK", {
+            message: "Delete Blog Success!",
+        });
+    } catch (error) {
+        //return response error
+        return utils.handlerResponse(res, "INTERNAL_ERROR", {
+            message: error.message || error,
+        });
+    }
+};
+
+export default { getAll, create, getById, editById, deleteById };

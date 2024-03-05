@@ -2,51 +2,21 @@
 
 ## Membuat endpoint Get Blog By Id
 
-membuat branch 10.endpoint/blog-edit-by-id dan pindah ke branch :
+membuat branch 11.endpoint/blog-delete-by-id dan pindah ke branch :
 
 ```console
-git checkout -b 10.endpoint/blog-edit-by-id
+git checkout -b 11.endpoint/blog-delete-by-id
 ```
 
-membuat module validation `editById` di file `blogValidation.js`
-
-```js
-//blogValidation.js
-...
-const editById = (req, res, next) => {
-    const input = req.body;
-    //validation input
-    const schema = Joi.object({
-        content: Joi.string(),
-        tags: Joi.string(),
-        title: Joi.string(),
-        old_thumbnail: Joi.string(),
-        thumbnail: Joi.allow(),
-    });
-    return utils.validationInput(req, res, next, schema, input);
-};
-
-export default { create, editById };
-```
-
-membuat module `editById` di file `blogController.js`
+membuat module `deleteById` di file `blogController.js`
 
 ```js
 //blogController.js
 ...
-const editById = async (req, res) => {
+const deleteById = async (req, res) => {
     try {
+        //put id from endpoint parameter
         const { id } = req.params;
-        const input = req.body;
-        const file = req.files;
-
-        //if replace thumbnail , old_thumbnail filename required!
-        if (file?.thumbnail && !input?.old_thumbnail) {
-            return utils.handlerResponse(res, `BAD_REQUEST`, {
-                message: "Found thumbnail file , old_thumbnail is required!",
-            });
-        }
-
         const existBlog = await blogSchema.findById(id);
         //if not found
         if (!existBlog) {
@@ -54,34 +24,12 @@ const editById = async (req, res) => {
                 message: "Blog Not Found!",
             });
         }
-
-        //access authorId from authData
-        const authorId = req.authData._id;
-        //process upload file or replace file
-        const { fileName, error: fileUploadError } = utils.processUploadFile(
-            file?.thumbnail,
-            input?.old_thumbnail
-        );
-        //if error upload file
-        if (fileUploadError) {
-            throw Error(fileUploadError);
-        }
-        //update object
-        const updateBlogObj = {
-            ...input,
-            author_id: authorId,
-            thumbnail: fileName,
-            tags: input?.tags ? input?.tags.split(",") : "",
-        };
-        //update in database
-        await blogSchema.findByIdAndUpdate(
-            { _id: id },
-            {
-                $set: updateBlogObj,
-            }
-        );
+        //remove file thumbnail in upload folder
+        utils.processUploadFile(false, existBlog?.thumbnail);
+        //delete in database
+        await blogSchema.deleteOne({ _id: id });
         return utils.handlerResponse(res, "OK", {
-            message: "Edit Blog Success!",
+            message: "Delete Blog Success!",
         });
     } catch (error) {
         //return response error
@@ -91,21 +39,26 @@ const editById = async (req, res) => {
     }
 };
 
-export default { getAll, create, getById, editById };
+export default { getAll, create, getById, editById, deleteById };
 ```
 
-buat router HTTP Method `PATCH` dengan path `/blog/:id` di file `routers.js`
+buat router HTTP Method `DELETE` dengan path `/blog/delete/:id` di file `routers.js`
 
 ```js
 //routers.js
 ...
 
-router.get("/blog/:id", blogController.getById);
 router.patch(
-    "/blog/:id",
+    "/blog/edit/:id",
     checkAuthMidddleware,
     blogValidation.editById,
     blogController.editById
+);
+
+router.delete(
+    "/blog/delete/:id",
+    checkAuthMidddleware,
+    blogController.deleteById
 );
 
 export default router;
@@ -123,11 +76,11 @@ git add .
 melakukan commit perubahan
 
 ```console
-git commit -m "add endpoint blog edit by id"
+git commit -m "add endpoint blog delete by id"
 ```
 
 mengupload ke repository github
 
 ```console
-git push origin 10.endpoint/blog-edit-by-id
+git push origin 11.endpoint/blog-delete-by-id
 ```
