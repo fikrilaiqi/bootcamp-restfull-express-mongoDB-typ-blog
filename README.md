@@ -36,10 +36,10 @@ membuat module `editProfile` di file userController
 ...
 const editProfile = async (req, res) => {
     try {
-        //access id from endpoint parameter
+        //take id from endpoint parameter
         const input = req.body;
         const file = req.files;
-        //access authorId from authData
+        //take authorId from authData
         const userId = req.authData._id;
 
         //find exit user
