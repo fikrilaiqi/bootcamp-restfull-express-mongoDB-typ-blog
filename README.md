@@ -25,7 +25,7 @@ MONGODB_URL=mongodb://127.0.0.1:27017/blog_typi
 
 membuat folder configs dan membuat file `db.js` didalamnya
 
-membuat module connectDb
+membuat module `connectDb`
 
 ```js
 //db.js
@@ -43,7 +43,7 @@ const connectDb = async () => {
 export default { connectDb };
 ```
 
-jalankan connectDb di app.js
+jalankan `connectDb` di `app.js`
 
 ```js
 //app.js
@@ -59,7 +59,7 @@ db.connectDb();
 app.use(express.json({ limit: "2MB" }));
 ```
 
-kok tidak jalan ya connectDbnya ?, secara default nodeJS tidak melakukan hot reload apabila ada perubahan pada code yang sedang berjalan.
+secara default `nodeJS` tidak melakukan hot reload apabila ada perubahan pada code yang sedang berjalan.
 
 untuk mengatasi problem itu , install package `nodemon` sebagai development dependencies.
 
@@ -124,8 +124,6 @@ const userSchema = new Schema(
 export default model("user", userSchema);
 ```
 
-membuat router endpoint `auth/register`
-
 beberapa package yang akan digunakan
 
 -   `bcrypt` => untuk mengenkripsi data sensitif, seperti password, agar tidak terekspos secara bebas.
@@ -135,7 +133,7 @@ beberapa package yang akan digunakan
 npm i bcrypt joi
 ```
 
-buat file routers dan buat router HTTP Method `POST` dengan path `auth/register`
+buat file `routers.js` dan buat router HTTP Method `POST` dengan path `/auth/register`
 
 ```js
 //routers.js
