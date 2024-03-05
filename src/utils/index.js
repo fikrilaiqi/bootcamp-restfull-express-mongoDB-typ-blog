@@ -92,25 +92,16 @@ const toUploadFile = (file) => {
 };
 
 const processUploadFile = (file, oldFileName) => {
-    //initial result
     let result = { fileName: null };
     try {
-        //if oldFileName found
         if (oldFileName) {
-            //if file exists
-            if (fs.existsSync(`./upload/${oldFileName}`)) {
-                //remove oldfile uploaded in folder upload
-                fs.unlinkSync(`./upload/${oldFileName}`);
-            }
+            fs.unlinkSync(`./upload/${oldFileName}`);
         }
-        //if file found
         if (file) {
-            //procees upload file
             result = toUploadFile(file);
         }
         return result;
     } catch (error) {
-        //return error
         return { ...result, error: error.message };
     }
 };

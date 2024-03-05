@@ -6,6 +6,7 @@ import blogController from "./controllers/blogController.js";
 import blogValidation from "./validations/blogValidation.js";
 import bookmarkController from "./controllers/bookmarkController.js";
 import userController from "./controllers/userController.js";
+import userValidation from "./validations/userValidation.js";
 const router = Router();
 
 //auth
@@ -61,5 +62,11 @@ router.delete(
 
 //user
 router.get("/user/:userId", userController.profile);
+router.patch(
+    "/user/profile/edit",
+    checkAuthMidddleware,
+    userValidation.editProfile,
+    userController.editProfile
+);
 
 export default router;
