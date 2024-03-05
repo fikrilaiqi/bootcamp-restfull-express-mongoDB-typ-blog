@@ -87,22 +87,23 @@ const getById = async (req, res) => {
 
 const editById = async (req, res) => {
     try {
+        //take id from path parameter
         const { id } = req.params;
         const input = req.body;
         const file = req.files;
-
-        //if replace thumbnail , old_thumbnail filename required!
-        if (file?.thumbnail && !input?.old_thumbnail) {
-            return utils.handlerResponse(res, `BAD_REQUEST`, {
-                message: "Found thumbnail file , old_thumbnail is required!",
-            });
-        }
-
+        //find exits blog
         const existBlog = await blogSchema.findById(id);
         //if not found
         if (!existBlog) {
             return utils.handlerResponse(res, "NOT_FOUND", {
                 message: "Blog Not Found!",
+            });
+        }
+
+        //if replace thumbnail , old_thumbnail filename required!
+        if (existBlog.toObject().thumbnail && !input?.old_thumbnail) {
+            return utils.handlerResponse(res, `BAD_REQUEST`, {
+                message: "Found thumbnail file , old_thumbnail is required!",
             });
         }
 

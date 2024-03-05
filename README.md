@@ -1,6 +1,6 @@
 # RestFull API menggunakan Express dan MongoDB
 
-## Membuat endpoint Get Blog By Id
+## Membuat endpoint Blog Edit By Id
 
 membuat branch 10.endpoint/blog-edit-by-id dan pindah ke branch :
 
@@ -36,22 +36,23 @@ membuat module `editById` di file `blogController.js`
 ...
 const editById = async (req, res) => {
     try {
+        //take id from path parameter
         const { id } = req.params;
         const input = req.body;
         const file = req.files;
-
-        //if replace thumbnail , old_thumbnail filename required!
-        if (file?.thumbnail && !input?.old_thumbnail) {
-            return utils.handlerResponse(res, `BAD_REQUEST`, {
-                message: "Found thumbnail file , old_thumbnail is required!",
-            });
-        }
-
+        //find exits blog
         const existBlog = await blogSchema.findById(id);
         //if not found
         if (!existBlog) {
             return utils.handlerResponse(res, "NOT_FOUND", {
                 message: "Blog Not Found!",
+            });
+        }
+
+        //if replace thumbnail , old_thumbnail filename required!
+        if (existBlog.toObject().thumbnail && !input?.old_thumbnail) {
+            return utils.handlerResponse(res, `BAD_REQUEST`, {
+                message: "Found thumbnail file , old_thumbnail is required!",
             });
         }
 
