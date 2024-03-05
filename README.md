@@ -1,6 +1,6 @@
 # RestFull API menggunakan Express dan MongoDB
 
-## Membuat endpoint Get Blog By Id
+## Membuat endpoint User Edit Profile
 
 membuat branch 18.endpoint/user-edit-profile dan pindah ke branch :
 
