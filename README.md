@@ -82,14 +82,14 @@ const createToken = (payload = {}) => {
 export default { getEnv, handlerResponse, validationInput, createToken };
 ```
 
-membuat environment variable `JWT_SECRET` di file `.env` yang isinya random string
+membuat environment variable `JWT_SECRET` di file `.env` yang isinya random string, contohnya seperti berikut
 
 ```
 ...
 JWT_SECRET=ncFal4i3yIdfkSDSDijasa36nsd3
 ```
 
-membuat modul login di file `authController.js`
+membuat modul `login` di file `authController.js`
 
 ```js
 //authController.js
@@ -112,6 +112,7 @@ const login = async (req, res) => {
         const { password: passUser, _id, ...rest } = existUser.toObject();
         //compare password in database with input password
         const isValid = await bcrypt.compare(input.password, passUser);
+        //if not valid password
         if (!isValid) {
             return utils.handlerResponse(res, "BAD_REQUEST", {
                 message: "Invalid Password!",
@@ -136,7 +137,7 @@ const login = async (req, res) => {
 export default { register, login };
 ```
 
-buat router HTTP Method `POST` dengan path `auth/login` di file `routers.js`
+buat router HTTP Method `POST` dengan path `/auth/login` di file `routers.js`
 
 ```js
 //routers.js
