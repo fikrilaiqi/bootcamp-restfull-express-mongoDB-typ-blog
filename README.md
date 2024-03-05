@@ -29,7 +29,7 @@ const blogSchema = new Schema(
 export default model("blog", blogSchema);
 ```
 
-membuat file `blogController.js` dan membuat module `getBlogAll`
+membuat file `blogController.js` dan membuat module `getAll`
 
 ```js
 //blogController.js
