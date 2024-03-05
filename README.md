@@ -1,6 +1,6 @@
 # RestFull API menggunakan Express dan MongoDB
 
-## Membuat endpoint Get Blog By Id
+## Membuat endpoint Get User By Id
 
 membuat branch 17.endpoint/user-by-id dan pindah ke branch :
 
@@ -17,7 +17,7 @@ import utils from "../utils/index.js";
 
 const profile = async (req, res) => {
     try {
-        //access userId from endpoint parameter
+        //take userId from endpoint parameter
         const { userId } = req.params;
         //find one by userId and hide password
         const response = await userSchema.findOne({ _id: userId }, "-password");
