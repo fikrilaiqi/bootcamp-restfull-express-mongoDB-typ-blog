@@ -1,6 +1,6 @@
 # RestFull API menggunakan Express dan MongoDB
 
-## Membuat endpoint Get Blog By Id
+## Membuat endpoint Delete Bookmark By Id
 
 membuat branch 16.endpoint/bookmark/delete-by-blog-id dan pindah ke branch :
 
