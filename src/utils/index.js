@@ -97,11 +97,7 @@ const processUploadFile = (file, oldFileName) => {
     try {
         //if oldFileName found
         if (oldFileName) {
-            //if file exists
-            if (fs.existsSync(`./upload/${oldFileName}`)) {
-                //remove oldfile uploaded in folder upload
-                fs.unlinkSync(`./upload/${oldFileName}`);
-            }
+            fs.unlinkSync(`./upload/${oldFileName}`);
         }
         //if file found
         if (file) {

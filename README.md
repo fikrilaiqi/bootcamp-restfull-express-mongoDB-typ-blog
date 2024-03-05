@@ -80,18 +80,13 @@ const toUploadFile = (file) => {
         return { ...result, error: error.message };
     }
 };
-
 const processUploadFile = (file, oldFileName) => {
     //initial result
     let result = { fileName: null };
     try {
         //if oldFileName found
         if (oldFileName) {
-            //if file exists
-            if (fs.existsSync(`./upload/${oldFileName}`)) {
-                //remove oldfile uploaded in folder upload
-                fs.unlinkSync(`./upload/${oldFileName}`);
-            }
+            fs.unlinkSync(`./upload/${oldFileName}`);
         }
         //if file found
         if (file) {
@@ -111,11 +106,11 @@ export default { getEnv, handlerResponse, validationInput, createToken, processU
 membuat folder `upload` di root folder, agar tidak error ketika upload file dan tambahkan pada file `.gitignore` di dalamnya agar semua isi file tidak ikut terupload di github repository
 
 ```console
-node_modules
-.env
+*
+!.gitignore
 ```
 
-membuat module create di file `blogController.js`
+membuat module `create` di file `blogController.js`
 
 ```js
 //blogController.js
