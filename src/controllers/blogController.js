@@ -58,4 +58,31 @@ const create = async (req, res) => {
     }
 };
 
-export default { getAll, create };
+const getById = async (req, res) => {
+    try {
+        //put id from endpoint parameter
+        const { id } = req.params;
+        //check exit blog
+        const existBlog = await blogSchema
+            .findOne({ _id: id })
+            .populate("author_id", "username image");
+        //if not found
+        if (!existBlog) {
+            return utils.handlerResponse(res, "NOT_FOUND", {
+                message: "Blog Not Found!",
+            });
+        }
+        //return response
+        return utils.handlerResponse(res, "OK", {
+            message: "Get Blog by Id Success!",
+            data: existBlog.toObject(),
+        });
+    } catch (error) {
+        //return response error
+        return utils.handlerResponse(res, "INTERNAL_ERROR", {
+            message: error.message || error,
+        });
+    }
+};
+
+export default { getAll, create, getById };

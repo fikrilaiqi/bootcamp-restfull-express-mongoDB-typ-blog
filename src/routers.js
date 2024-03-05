@@ -23,5 +23,6 @@ router.post(
     blogValidation.create,
     blogController.create
 );
+router.get("/blog/:id", blogController.getById);
 
 export default router;
