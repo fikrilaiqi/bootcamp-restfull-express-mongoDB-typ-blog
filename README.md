@@ -12,8 +12,8 @@ membuat file `userController.js` di folder controller dan membuat module profile
 
 ```js
 //userController.js
-import userSchema from "../schemas/userSchema";
-import utils from "../utils";
+import userSchema from "../schemas/userSchema.js";
+import utils from "../utils/index.js";
 
 const profile = async (req, res) => {
     try {
@@ -21,6 +21,12 @@ const profile = async (req, res) => {
         const { userId } = req.params;
         //find one by userId and hide password
         const response = await userSchema.findOne({ _id: userId }, "-password");
+        //if user not found
+        if (!response) {
+            return utils.handlerResponse(res, "NOT_FOUND", {
+                message: "User Not Found!",
+            });
+        }
         return utils.handlerResponse(res, "OK", {
             message: "Get user by id Success!",
             data: response,
