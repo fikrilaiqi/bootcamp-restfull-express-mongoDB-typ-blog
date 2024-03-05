@@ -29,7 +29,7 @@ const blogSchema = new Schema(
 export default model("blog", blogSchema);
 ```
 
-membuat file `blogController.js` dan membuat module getBlogAll
+membuat file `blogController.js` dan membuat module `getBlogAll`
 
 ```js
 //blogController.js
@@ -56,7 +56,7 @@ const getAll = async (req, res) => {
 export default { getAll };
 ```
 
-buat router HTTP Method `GET` dengan path `/blog/all` di file `routers.js`
+membuat router HTTP Method `GET` dengan path `/blog/all` di file `routers.js`
 
 ```js
 //routers.js
