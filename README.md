@@ -83,7 +83,7 @@ const refreshToken = async (req, res) => {
 export default { register, login, refreshToken };
 ```
 
-buat router HTTP Method `GET` dengan path `/auth/refresh-token` di file `routers.js`
+membuatbuat router HTTP Method `GET` dengan path `/auth/refresh-token` di file `routers.js`
 
 ```js
 //routers.js
