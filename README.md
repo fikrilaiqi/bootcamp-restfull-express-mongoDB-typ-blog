@@ -15,9 +15,9 @@ membuat module `getById` di file `blogController.js`
 ...
 const getById = async (req, res) => {
     try {
-        //put id from endpoint parameter
+        //take id from endpoint parameter
         const { id } = req.params;
-        //check exit blog
+        //check exit blog and populate author_id
         const existBlog = await blogSchema
             .findOne({ _id: id })
             .populate("author_id", "username image");
