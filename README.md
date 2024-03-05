@@ -10,7 +10,7 @@ git checkout -b 6.endpoint/auth-refresh-token
 
 > untuk melindungi akses routers/endpoints yang membutuhkan authentifikasi,harus memeriksa terlebih dahulu request yang masuk, apakah memiliki token valid atau tidak melalui middleware dan apabila secretnya tidak sama dengan yang disimpan server maka tidak akan lolos verifikasi.
 
-buat folder middlewares dan buat file `checkAuthMiddleware.js`
+membuat folder middlewares dan membuat file `checkAuthMiddleware.js`
 
 ```js
 //checkAuthMiddleware.js
