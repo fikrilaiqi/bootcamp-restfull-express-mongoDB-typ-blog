@@ -25,7 +25,7 @@ router.post(
 );
 router.get("/blog/:id", blogController.getById);
 router.patch(
-    "/blog/:id",
+    "/blog/edit/:id",
     checkAuthMidddleware,
     blogValidation.editById,
     blogController.editById

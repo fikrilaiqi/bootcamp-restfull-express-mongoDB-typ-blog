@@ -94,7 +94,7 @@ const editById = async (req, res) => {
 export default { getAll, create, getById, editById };
 ```
 
-buat router HTTP Method `PATCH` dengan path `/blog/:id` di file `routers.js`
+buat router HTTP Method `PATCH` dengan path `/blog/edit/:id` di file `routers.js`
 
 ```js
 //routers.js
@@ -102,7 +102,7 @@ buat router HTTP Method `PATCH` dengan path `/blog/:id` di file `routers.js`
 
 router.get("/blog/:id", blogController.getById);
 router.patch(
-    "/blog/:id",
+    "/blog/edit/:id",
     checkAuthMidddleware,
     blogValidation.editById,
     blogController.editById
