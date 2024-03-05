@@ -39,10 +39,10 @@ router.delete(
 router.get("/blog/history/:authorId", blogController.historyByAuthorId);
 
 //bookmark
-router.get(
-    "/bookmark/history-user/:BlogId",
+router.post(
+    "/bookmark/create",
     checkAuthMidddleware,
-    bookmarkController.historyUserByBlogId
+    bookmarkController.create
 );
 
 export default router;
