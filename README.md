@@ -2,41 +2,28 @@
 
 ## Membuat endpoint Get Blog By Id
 
-membuat branch 16.endpoint/bookmark/delete-by-blog-id dan pindah ke branch :
+membuat branch 17.endpoint/user-by-id dan pindah ke branch :
 
 ```console
-git checkout -b 16.endpoint/bookmark/delete-by-blog-id
+git checkout -b 17.endpoint/user-by-id
 ```
 
-membuat module `deleteByBlogId` di file `bookmarkController.js`
+membuat file `userController.js` di folder controller dan membuat module profile
 
 ```js
-//bookmarkController.js
-const deleteByBlogId = async (req, res) => {
+//userController.js
+import userSchema from "../schemas/userSchema";
+import utils from "../utils";
+
+const profile = async (req, res) => {
     try {
-        //access blogId from endpoint parameter
-        const { blogId } = req.params;
-        //access userId from authData
-        const userId = req.authData;
-        //defaine filter
-        const filter = {
-            user_id: userId,
-            blog_id: blogId,
-        };
-        //exits bookmark
-        const existBookmark = await bookmarkSchema.findOne(filter);
-        //if not found bookmark
-        if (!existBookmark) {
-            return utils.handlerResponse(res, `NOT_FOUND`, {
-                message: "Not Found Bookmark!",
-            });
-        }
-        //delete bookmark in database
-        await bookmarkSchema.deleteOne(filter);
-        //return response
+        //access userId from endpoint parameter
+        const { userId } = req.params;
+        //find one by userId and hide password
+        const response = await userSchema.findOne({ _id: userId }, "-password");
         return utils.handlerResponse(res, "OK", {
-            message: "Delete Bookmark by blog id Success!",
-            data: getBlogs,
+            message: "Get user by id Success!",
+            data: response,
         });
     } catch (error) {
         //return response error
@@ -46,24 +33,23 @@ const deleteByBlogId = async (req, res) => {
     }
 };
 
-export default { create, historyUserByBlogId, historyByUserId, deleteByBlogId };
+export default { profile };
 ```
 
-buat router HTTP Method `DELETE` dengan path `/bookmark/delete/:blogId` di file `routers.js`
+buat router HTTP Method `GET` dengan path `/user/:userId` di file `routers.js`
 
 ```js
 //routers.js
 ...
 
-//bookmark
-router.get(
-    "/bookmark/history-user/:blogId",
+router.delete(
+    "/bookmark/delete/:blogId",
     checkAuthMidddleware,
-    bookmarkController.historyUserByBlogId
+    bookmarkController.deleteByBlogId
 );
 
-
-router.get("/bookmark/history/:userId", bookmarkController.historyByUserId);
+//user
+router.get("/user/:userId", userController.profile);
 
 export default router;
 
@@ -80,11 +66,11 @@ git add .
 melakukan commit perubahan
 
 ```console
-git commit -m "add endpoint bookmark delete by blog id"
+git commit -m "add endpoint user by user id"
 ```
 
 mengupload ke repository github
 
 ```console
-git push origin 16.endpoint/bookmark/delete-by-blog-id
+git push origin 17.endpoint/user-by-id
 ```

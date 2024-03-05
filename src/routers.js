@@ -5,6 +5,7 @@ import { checkAuthMidddleware } from "./middlewares/checkAuthMiddleware.js";
 import blogController from "./controllers/blogController.js";
 import blogValidation from "./validations/blogValidation.js";
 import bookmarkController from "./controllers/bookmarkController.js";
+import userController from "./controllers/userController.js";
 const router = Router();
 
 //auth
@@ -57,5 +58,8 @@ router.delete(
     checkAuthMidddleware,
     bookmarkController.deleteByBlogId
 );
+
+//user
+router.get("/user/:userId", userController.profile);
 
 export default router;
