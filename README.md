@@ -1,6 +1,6 @@
 # RestFull API menggunakan Express dan MongoDB
 
-## Membuat endpoint Get Blog By Id
+## Membuat endpoint Get Bookmark History User By Blog Id
 
 membuat branch 14.endpoint/bookmark-history-user-by-blog-id dan pindah ke branch :
 
@@ -14,9 +14,9 @@ membuat module `historyUserByBlogId` di file `bookmarkController.js`
 //bookmarkController.js
 const historyUserByBlogId = async (req, res) => {
     try {
-        //access BlogId from endpoint parameter
+        //take BlogId from endpoint parameter
         const { blogId } = req.params;
-        //access authorId from authData
+        //take authorId from authData
         const userId = req.authData;
         //find in database
         const response = await bookmarkSchema.findOne({
