@@ -322,6 +322,7 @@ export default { getEnv, handlerResponse };
 ...
 const validationInput = (req, res, next, joiSchema, input) => {
     try {
+        //if joinSchema and input empty
         if (!joiSchema || !input) {
             throw Error("schema and input is reqiured!");
         }
@@ -330,8 +331,10 @@ const validationInput = (req, res, next, joiSchema, input) => {
         if (error) {
             throw Error(error.details.at(0).message);
         }
+        //next process
         next();
     } catch (error) {
+        //if error
         return handlerResponse(res, `BAD_REQUEST`, {
             message: `Validation Error : ${error}`,
         });
