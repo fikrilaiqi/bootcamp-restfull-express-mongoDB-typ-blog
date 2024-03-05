@@ -127,7 +127,7 @@ const create = async (req, res) => {
         if (errFileUpload) {
             throw Error(errFileUpload);
         }
-        //access authorId from authData
+        //take author id from authData
         const authorId = req.authData._id;
         //create Object
         const createBlogObj = {
