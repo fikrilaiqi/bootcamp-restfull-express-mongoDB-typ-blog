@@ -99,15 +99,13 @@ const editById = async (req, res) => {
                 message: "Blog Not Found!",
             });
         }
-
         //if replace thumbnail , old_thumbnail filename required!
-        if (existBlog.toObject().thumbnail && !input?.old_thumbnail) {
+        if (existBlog.toObject()?.thumbnail && !input?.old_thumbnail) {
             return utils.handlerResponse(res, `BAD_REQUEST`, {
                 message: "Found thumbnail file , old_thumbnail is required!",
             });
         }
-
-        //access authorId from authData
+        //take author id from authData
         const authorId = req.authData._id;
         //process upload file or replace file
         const { fileName, error: fileUploadError } = utils.processUploadFile(
