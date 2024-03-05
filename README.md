@@ -1,6 +1,6 @@
 # RestFull API menggunakan Express dan MongoDB
 
-## Membuat endpoint Get Blog By Id
+## Membuat endpoint Delete Blog By Id
 
 membuat branch 11.endpoint/blog-delete-by-id dan pindah ke branch :
 
@@ -15,7 +15,7 @@ membuat module `deleteById` di file `blogController.js`
 ...
 const deleteById = async (req, res) => {
     try {
-        //put id from endpoint parameter
+        //take id from endpoint parameter
         const { id } = req.params;
         const existBlog = await blogSchema.findById(id);
         //if not found
